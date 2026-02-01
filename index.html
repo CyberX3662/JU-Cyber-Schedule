@@ -14,6 +14,7 @@
             --accent: #58a6ff;
             --success: #238636;
             --muted: #8b949e;
+            --danger: #da3633;
         }
 
         body {
@@ -21,32 +22,32 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 40px;
+            padding: 20px;
             display: flex;
             justify-content: center;
         }
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
         }
 
         .header-actions {
             display: flex;
-            justify-content: center; /* توسيط العنوان */
+            justify-content: center;
             align-items: center;
             margin-bottom: 30px;
         }
 
-        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.8rem; }
+        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem; }
 
-        /* تنسيق زر التقويم الصغير */
+        /* زر التقويم */
         .btn-add { 
             background: rgba(35, 134, 54, 0.1);
             color: var(--success); 
             border: 1px solid var(--border); 
-            font-size: 0.8rem; 
-            padding: 6px 12px;
+            font-size: 0.75rem; 
+            padding: 6px 10px;
             border-radius: 6px;
             cursor: pointer;
             font-family: inherit;
@@ -54,10 +55,19 @@
             align-items: center;
             gap: 6px;
             transition: 0.2s;
+            white-space: nowrap;
         }
         .btn-add:hover { 
             background: rgba(35, 134, 54, 0.2); 
             border-color: var(--success); 
+        }
+
+        /* زر منتهي الصلاحية (للمحاضرات السابقة) */
+        .btn-disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--muted);
+            border-color: transparent;
+            cursor: not-allowed;
         }
 
         table {
@@ -71,13 +81,14 @@
 
         th {
             background: #21262d;
-            padding: 15px;
+            padding: 12px;
             text-align: right;
             border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
         }
 
         td {
-            padding: 15px;
+            padding: 12px;
             border-bottom: 1px solid var(--border);
             vertical-align: top;
         }
@@ -85,7 +96,7 @@
         tr:last-child td { border-bottom: none; }
 
         .day-col {
-            width: 120px;
+            width: 100px;
             font-weight: bold;
             color: var(--accent);
             background: rgba(255,255,255,0.02);
@@ -95,9 +106,9 @@
         }
 
         .date-sub {
-            font-size: 0.75rem; 
+            font-size: 0.7rem; 
             color: var(--muted); 
-            margin-bottom: 10px; 
+            margin-bottom: 8px; 
             font-family: monospace;
             direction: ltr;
         }
@@ -105,8 +116,8 @@
         .lecture-item {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border);
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
             border-radius: 6px;
             border-right: 3px solid transparent;
             display: flex;
@@ -114,25 +125,25 @@
             align-items: center;
         }
 
-        .lecture-info h4 { margin: 0 0 8px 0; font-size: 1rem; }
+        .lecture-info h4 { margin: 0 0 5px 0; font-size: 0.9rem; }
         
         .lecture-meta { 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             color: var(--muted); 
             display: flex; 
             flex-wrap: wrap;
-            gap: 15px; 
+            gap: 10px; 
         }
 
         .meta-row {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .icon-svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             fill: currentColor;
             opacity: 0.8;
         }
@@ -140,8 +151,9 @@
         /* تحسينات للجوال */
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .lecture-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .day-col { width: 90px; }
+            .lecture-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .day-col { width: 85px; font-size: 0.9rem; }
+            h2 { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -150,7 +162,7 @@
 <div class="container">
     <div class="header-actions">
         <h2>
-            <svg class="icon-svg" style="width:28px; height:28px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
             الجدول الدراسي
         </h2>
     </div>
@@ -185,10 +197,10 @@
         { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
     ];
 
-    // 2. دالة حساب الأحد
+    // 2. دالة حساب الأحد (بداية الأسبوع الحالي)
     function getSundayDate() {
         const d = new Date();
-        const day = d.getDay();
+        const day = d.getDay(); // 0 = Sunday
         const diff = d.getDate() - day; 
         return new Date(d.setDate(diff));
     }
@@ -196,11 +208,23 @@
     // 3. بناء الجدول
     const tableBody = document.getElementById('table-body');
     const sunday = getSundayDate();
+    const now = new Date(); // الوقت الحالي
 
     scheduleData.forEach((day) => {
         let currentDayDate = new Date(sunday);
         currentDayDate.setDate(sunday.getDate() + day.dayOffset);
         
+        // التحقق مما إذا كان اليوم بالكامل في الماضي
+        // نجعل وقته نهاية اليوم للمقارنة
+        let endOfDay = new Date(currentDayDate);
+        endOfDay.setHours(23, 59, 59);
+        const isPastDay = now > endOfDay;
+
+        // حالة الزر (نشط أو معطل)
+        let btnClass = isPastDay ? 'btn-add btn-disabled' : 'btn-add';
+        let btnText = isPastDay ? 'انتهى' : 'تقويم';
+        let btnAction = isPastDay ? '' : `onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})'`;
+
         const tr = document.createElement('tr');
 
         // عمود اليوم
@@ -209,9 +233,9 @@
         dayTd.innerHTML = `
             <div>${day.dayName}</div>
             <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
-            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn-add">
+            <button ${btnAction} class="${btnClass}">
                 <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                تقويم
+                ${btnText}
             </button>
         `;
         tr.appendChild(dayTd);
@@ -219,13 +243,23 @@
         // عمود المحاضرات
         const lecTd = document.createElement('td');
         if(day.lectures.length === 0) {
-            lecTd.innerHTML = '<span style="color:#666">لا توجد محاضرات</span>';
+            lecTd.innerHTML = '<span style="color:#666; font-size:0.9rem;">لا توجد محاضرات</span>';
         } else {
             day.lectures.forEach(lec => {
                 const c = courses[lec.cIdx];
                 const div = document.createElement('div');
                 div.className = 'lecture-item';
                 div.style.borderRightColor = c.color;
+
+                // التحقق من حالة المحاضرة (جارية/منتهية) لتغيير شكلها قليلاً
+                let lecEnd = new Date(currentDayDate);
+                let [eh, em] = lec.e.split(':');
+                lecEnd.setHours(parseInt(eh), parseInt(em), 0);
+                
+                // إذا انتهت المحاضرة نجعلها باهتة
+                if (now > lecEnd) {
+                    div.style.opacity = '0.5';
+                }
                 
                 const formatTime = (t) => {
                     let [h, m] = t.split(':'); h=parseInt(h);
@@ -246,8 +280,8 @@
                                 <span>${formatTime(lec.s)} - ${formatTime(lec.e)}</span>
                             </div>
                         </div>
-                        <div style="font-size:0.8rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:5px;">
-                            <svg class="icon-svg" style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                        <div style="font-size:0.75rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:4px;">
+                            <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
                             عن بعد - Blackboard
                         </div>
                     </div>
@@ -259,13 +293,12 @@
         tableBody.appendChild(tr);
     });
 
-    // 4. إضافة للتقويم (المنطق الذكي)
+    // 4. إضافة للتقويم (فلترة ذكية)
     function addToCalendar(lectures, dayOffset) {
         let targetDate = new Date(sunday);
         targetDate.setDate(sunday.getDate() + dayOffset);
         
         const now = new Date();
-        const isToday = targetDate.toDateString() === now.toDateString();
         
         let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//MySchedule//AR\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
         let addedCount = 0;
@@ -281,9 +314,9 @@
             let [eh, em] = lec.e.split(':');
             endDt.setHours(parseInt(eh), parseInt(em), 0);
 
-            // الشرط: إذا اليوم هو نفس يوم المحاضرة والوقت انتهى، لا تضفها
-            if (isToday && now > endDt) {
-                return; 
+            // ⚠️ التعديل المهم: تجاهل المحاضرات التي انتهى وقتها تماماً
+            if (now > endDt) {
+                return; // لا تضفها
             }
 
             addedCount++;
@@ -291,9 +324,9 @@
             let summary = course.name;
             let description = `المحاضر: ${course.lecturer}`;
             
-            if (isToday && now >= startDt && now <= endDt) {
+            // إذا كانت جارية الآن
+            if (now >= startDt && now <= endDt) {
                 summary = `[جارية الآن] ${course.name}`;
-                description += `\nتنبيه: المحاضرة بدأت بالفعل!`;
             }
 
             const formatICS = (d) => d.toISOString().replace(/-|:|\.\d+/g, '').substring(0, 15) + 'Z';
@@ -311,7 +344,7 @@
         icsContent += "END:VCALENDAR";
 
         if (addedCount === 0) {
-            alert("جميع محاضرات هذا اليوم انتهت بالفعل");
+            alert("جميع محاضرات هذا اليوم انتهت! 🏁\nلا يوجد شيء لإضافته للتقويم.");
             return;
         }
 
