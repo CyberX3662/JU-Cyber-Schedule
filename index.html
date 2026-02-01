@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجدول الدراسي</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --accent: #58a6ff;
+            --success: #238636;
+            --muted: #8b949e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h2 { margin: 0; display: flex; align-items: center; gap: 10px; }
+
+        .btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn:hover { border-color: var(--accent); color: var(--accent); }
+        
+        .btn-add { 
+            color: var(--success); 
+            border-color: var(--border); 
+            font-size: 0.8rem; 
+            padding: 4px 10px;
+        }
+        .btn-add:hover { background: rgba(35, 134, 54, 0.1); border-color: var(--success); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #21262d;
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .day-col {
+            width: 120px;
+            font-weight: bold;
+            color: var(--accent);
+            background: rgba(255,255,255,0.02);
+            border-left: 1px solid var(--border);
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .date-sub {
+            font-size: 0.75rem; 
+            color: var(--muted); 
+            margin-bottom: 8px; 
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        .lecture-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-right: 3px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lecture-info h4 { margin: 0 0 8px 0; font-size: 1rem; }
+        
+        .lecture-meta { 
+            font-size: 0.85rem; 
+            color: var(--muted); 
+            display: flex; 
+            flex-wrap: wrap;
+            gap: 15px; 
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* SVG Styles */
+        .icon-svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            opacity: 0.7;
+        }
+
+        /* الطباعة */
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .btn, .header-actions button { display: none; }
+            table { border: 1px solid black; }
+            th { background: #eee; color: black; border-bottom: 1px solid black; }
+            td, .day-col { border-bottom: 1px solid #ccc; color: black; }
+            .lecture-item { border: 1px solid #ddd; background: white; color: black; }
+            .icon-svg { fill: black; opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-actions">
+        <h2>
+            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent); opacity:1;" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            الجدول الدراسي
+        </h2>
+        <button onclick="downloadPDF()" class="btn">
+            <svg class="icon-svg" style="opacity:1" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            تحميل PDF
+        </button>
+    </div>
+
+    <table id="schedule-table">
+        <thead>
+            <tr>
+                <th>اليوم</th>
+                <th>المحاضرات</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // 1. البيانات
+    const courses = [
+        { code: "ADEN 1110", name: "اللغة الإنجليزية 1", color: "#3b82f6", lecturer: "د. جلال حابس الربيع" },
+        { code: "ADIT 1110", name: "مقدمة تقنية المعلومات", color: "#06b6d4", lecturer: "د. محمود عبدالمنعم" },
+        { code: "ADCY 1111", name: "أساسيات الشبكات", color: "#10b981", lecturer: "د. عبدالعزيز الدمراني" },
+        { code: "ADCY 1112", name: "أمن سيبراني", color: "#f43f5e", lecturer: "د. عمرو عبدالواحد" },
+        { code: "ADCY 1113", name: "رياضيات الحاسب", color: "#8b5cf6", lecturer: "د. أسامة رزق شاهين" }
+    ];
+
+    const scheduleData = [
+        { dayOffset: 0, dayName: "الأحد", lectures: [{ cIdx: 1, s: "15:00", e: "16:50" }, { cIdx: 2, s: "17:00", e: "17:50" }, { cIdx: 0, s: "18:00", e: "19:50" }] },
+        { dayOffset: 1, dayName: "الإثنين", lectures: [{ cIdx: 3, s: "15:00", e: "16:50" }, { cIdx: 4, s: "17:00", e: "18:50" }] },
+        { dayOffset: 2, dayName: "الثلاثاء", lectures: [{ cIdx: 1, s: "15:00", e: "15:50" }, { cIdx: 2, s: "16:00", e: "17:50" }] },
+        { dayOffset: 3, dayName: "الأربعاء", lectures: [{ cIdx: 3, s: "15:00", e: "15:50" }, { cIdx: 4, s: "16:00", e: "16:50" }] },
+        { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
+    ];
+
+    // 2. دالة حساب الأحد
+    function getSundayDate() {
+        const d = new Date();
+        const day = d.getDay();
+        const diff = d.getDate() - day; 
+        return new Date(d.setDate(diff));
+    }
+
+    // 3. بناء الجدول
+    const tableBody = document.getElementById('table-body');
+    const sunday = getSundayDate();
+
+    scheduleData.forEach((day) => {
+        let currentDayDate = new Date(sunday);
+        currentDayDate.setDate(sunday.getDate() + day.dayOffset);
+        
+        const tr = document.createElement('tr');
+
+        // عمود اليوم
+        const dayTd = document.createElement('td');
+        dayTd.className = 'day-col';
+        dayTd.innerHTML = `
+            <div>${day.dayName}</div>
+            <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
+            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn btn-add">
+                <svg class="icon-svg" style="width:12px; height:12px; fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                تقويم
+            </button>
+        `;
+        tr.appendChild(dayTd);
+
+        // عمود المحاضرات
+        const lecTd = document.createElement('td');
+        if(day.lectures.length === 0) {
+            lecTd.innerHTML = '<span style="color:#666">لا توجد محاضرات</span>';
+        } else {
+            day.lectures.forEach(lec => {
+                const c = courses[lec.cIdx];
+                const div = document.createElement('div');
+                div.className = 'lecture-item';
+                div.style.borderRightColor = c.color;
+                
+                const formatTime = (t) => {
+                    let [h, m] = t.split(':'); h=parseInt(h);
+                    let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
+                    return `${h}:${m} ${ampm}`;
+                };
+
+                div.innerHTML = `
+                    <div class="lecture-info">
+                        <h4>${c.name} <span style="font-size:0.8em; color:${c.color}">(${c.code})</span></h4>
+                        <div class="lecture-meta">
+                            <div class="meta-row">
+                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <span>${c.lecturer}</span>
+                            </div>
+                            <div class="meta-row">
+                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                <span>${formatTime(lec.s)} - ${formatTime(lec.e)}</span>
+                            </div>
+                        </div>
+                        <div style="font-size:0.8rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:5px;">
+                            <svg class="icon-svg" style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                            عن بعد - Blackboard
+                        </div>
+                    </div>
+                `;
+                lecTd.appendChild(div);
+            });
+        }
+        tr.appendChild(lecTd);
+        tableBody.appendChild(tr);
+    });
+
+    // 4. تحميل PDF
+    function downloadPDF() {
+        const element = document.querySelector('.container');
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(b => b.style.display = 'none');
+        html2pdf().from(element).save('جدول_الأمن_السيبراني.pdf').then(() => {
+            buttons.forEach(b => b.style.display = ''); 
+        });
+    }
+
+    // 5. إضافة للتقويم (المنطق الذكي)
+    function addToCalendar(lectures, dayOffset) {
+        let targetDate = new Date(sunday);
+        targetDate.setDate(sunday.getDate() + dayOffset);
+        
+        const now = new Date();
+        const isToday = targetDate.toDateString() === now.toDateString();
+        
+        let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//MySchedule//AR\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
+        let addedCount = 0;
+
+        lectures.forEach(lec => {
+            const course = courses[lec.cIdx];
+            
+            let startDt = new Date(targetDate);
+            let [sh, sm] = lec.s.split(':');
+            startDt.setHours(parseInt(sh), parseInt(sm), 0);
+
+            let endDt = new Date(targetDate);
+            let [eh, em] = lec.e.split(':');
+            endDt.setHours(parseInt(eh), parseInt(em), 0);
+
+            // الشرط: إذا اليوم هو نفس يوم المحاضرة والوقت انتهى، لا تضفها
+            if (isToday && now > endDt) {
+                return; 
+            }
+
+            addedCount++;
+            
+            let summary = course.name;
+            let description = `المحاضر: ${course.lecturer}`;
+            
+            if (isToday && now >= startDt && now <= endDt) {
+                summary = `[جارية الآن] ${course.name}`;
+                description += `\nتنبيه: المحاضرة بدأت بالفعل!`;
+            }
+
+            const formatICS = (d) => d.toISOString().replace(/-|:|\.\d+/g, '').substring(0, 15) + 'Z';
+
+            icsContent += "BEGIN:VEVENT\n";
+            icsContent += `DTSTART:${formatICS(startDt)}\n`;
+            icsContent += `DTEND:${formatICS(endDt)}\n`;
+            icsContent += `SUMMARY:${summary}\n`;
+            icsContent += `DESCRIPTION:${description}\n`;
+            icsContent += "LOCATION:Blackboard - عن بعد\n";
+            icsContent += `UID:${Date.now()}_${lec.cIdx}@myschedule\n`;
+            icsContent += "END:VEVENT\n";
+        });
+
+        icsContent += "END:VCALENDAR";
+
+        if (addedCount === 0) {
+            alert("جميع محاضرات هذا اليوم انتهت بالفعل");
+            return;
+        }
+
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `schedule_${targetDate.toISOString().slice(0,10)}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
+
