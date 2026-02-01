@@ -6,7 +6,7 @@
     <title>بوابة الأمن السيبراني</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d1117">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/993/993891.png">
     
     <style>
         :root {
@@ -57,7 +57,8 @@
             line-height: 40px;
         }
         .ticker strong { color: var(--warning); }
-        .ticker span { color: var(--accent); }
+        /* لون مميز لكلمة قناة التلجرام */
+        .ticker span { color: var(--telegram); font-weight: bold; }
         
         @keyframes ticker {
             0% { transform: translate3d(0, 0, 0); }
@@ -93,7 +94,6 @@
 
         .btn-telegram { background: var(--telegram); }
         .btn-telegram:hover { background: #1b8ac0; }
-        /* ستايل الزر إذا كان الرابط غير متوفر */
         .btn-telegram.disabled { background: #2f363d; color: #8b949e; cursor: help; }
 
         .btn-notify { background: var(--card-bg); border: 1px solid var(--muted); color: var(--text); }
@@ -170,7 +170,7 @@
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث في وقت المحاضرة، الرجوع دائمًا إلى <span>(رابط القناة سيتم إضافته لاحقاً حال توفره)</span> أو البلاك بورد.
+        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث في وقت المحاضرة، الرجوع دائمًا إلى <span>قناة التلجرام (الرابط قريباً)</span> أو البلاك بورد.
     </div>
 </div>
 
@@ -186,7 +186,7 @@
 
     <div class="header-actions">
         <h2 class="header-title">
-            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
             الجدول الدراسي
         </h2>
         <div class="header-buttons">
@@ -209,17 +209,16 @@
 
 <script>
     // ============================================
-    // 1. الإعدادات والروابط
+    // 1. الإعدادات
     // ============================================
-    const telegramLink = ""; // 👈 اتركه فارغاً حتى يتوفر الرابط
+    const telegramLink = ""; // 👈 اتركها فارغة حالياً
 
-    // منطق زر التيليجرام الذكي
     const telegramBtn = document.getElementById('telegram-btn');
     if (!telegramLink) {
         telegramBtn.href = "javascript:void(0)";
         telegramBtn.classList.add('disabled');
         telegramBtn.onclick = () => alert("عذراً، رابط القناة غير متوفر حالياً. سيتم إضافته قريباً بإذن الله.");
-        document.getElementById('telegram-text').innerText = "قريباً...";
+        document.getElementById('telegram-text').innerText = "القناة (قريباً)";
     } else {
         telegramBtn.href = telegramLink;
     }
@@ -266,7 +265,7 @@
                     notifyBtn.classList.add('active');
                     new Notification("تم تفعيل التنبيهات! 🔔", {
                         body: "سنقوم بتنبيهك قبل المحاضرات بـ 10 دقائق.",
-                        icon: "icon-192.png"
+                        icon: "https://cdn-icons-png.flaticon.com/512/993/993891.png"
                     });
                 }
             });
@@ -296,7 +295,7 @@
                 const course = courses[lec.cIdx];
                 new Notification(`تذكير: محاضرة ${course.name}`, {
                     body: `ستبدأ بعد 10 دقائق مع ${course.lecturer}`,
-                    icon: "icon-192.png"
+                    icon: "https://cdn-icons-png.flaticon.com/512/993/993891.png"
                 });
                 notifiedLectures.add(lecKey);
             }
@@ -518,4 +517,3 @@
 
 </body>
 </html>
-
