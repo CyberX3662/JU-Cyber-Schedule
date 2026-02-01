@@ -1,19 +1,19 @@
 {
-  "name": "الجدول الدراسي",
+  "name": "جدول الأمن السيبراني",
   "short_name": "الجدول",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
-  "description": "بوابة الأمن السيبراني",
+  "description": "بوابة طلابية للأمن السيبراني",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2092/2092204.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2432/2432650.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2092/2092204.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2432/2432650.png",
       "sizes": "512x512",
       "type": "image/png"
     }
