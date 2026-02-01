@@ -14,38 +14,42 @@
             --bg: #0d1117; --card-bg: #161b22; --border: #30363d; --text: #e6edf3;
             --accent: #58a6ff; --cyan: #39c5bb; --success: #238636; --danger: #da3633; 
             --warning: #d29922; --muted: #8b949e; 
-            --glow: rgba(88, 166, 255, 0.25);
+            --glow: rgba(88, 166, 255, 0.3);
         }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         
-        .ticker-wrap { width: 100%; background: rgba(56, 139, 253, 0.1); border-bottom: 1px solid var(--border); overflow: hidden; height: 35px; display: flex; align-items: center; position: relative; z-index: 10; }
-        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; color: var(--text); font-size: 0.8rem; line-height: 35px; }
+        /* شريط التنبيهات السريع */
+        .ticker-wrap { width: 100%; background: rgba(56, 139, 253, 0.1); border-bottom: 1px solid var(--border); overflow: hidden; height: 35px; display: flex; align-items: center; position: relative; z-index: 10; transition: 0.3s; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 20s linear infinite; color: var(--text); font-size: 0.8rem; line-height: 35px; }
+        .ticker.alert-mode { color: #ff7b72; font-weight: bold; }
+        .ticker-wrap.alert-bg { background: rgba(218, 54, 51, 0.15); border-color: var(--danger); }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        .container { width: 90%; max-width: 800px; padding: 20px 0; padding-bottom: 100px; flex: 1; }
+        /* التبويبات */
+        .tabs-nav { display: flex; width: 100%; max-width: 800px; background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: var(--muted); font-size: 0.9rem; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(88, 166, 255, 0.05); }
+
+        .container { width: 90%; max-width: 800px; padding: 20px 0; padding-bottom: 120px; flex: 1; display: none; }
+        .container.active-content { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .icon-svg { width: 18px; height: 18px; fill: var(--muted); vertical-align: middle; transition: 0.2s; }
-        .active .icon-svg, button:hover .icon-svg { fill: var(--text); }
-
-        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .info-title { font-size: 0.9rem; color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         
-        .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 10px; }
-        .btn-link { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); 
-            padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.8rem; 
-            display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-weight: 500;
-        }
-        .btn-link:hover { background: var(--border); border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-        .btn-link .icon-svg { fill: var(--text); }
-        .btn-link:hover .icon-svg { fill: var(--accent); }
+        /* البطاقات */
+        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .info-title { font-size: 1rem; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 
-        .login-row { display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; }
+        /* بيانات الدخول (التصميم الجديد) */
+        .login-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .login-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+        .login-row:last-child { margin-bottom: 0; }
         .login-label { color: var(--muted); }
-        .login-val { font-family: monospace; color: var(--cyan); letter-spacing: 1px; font-weight: bold; }
+        .login-val { color: var(--cyan); font-family: monospace; font-weight: bold; letter-spacing: 1px; }
         
-        .security-note { background: rgba(218, 54, 51, 0.1); border-left: 3px solid var(--danger); color: #ff7b72; font-size: 0.75rem; padding: 8px 12px; border-radius: 0 4px 4px 0; margin-top: 10px; line-height: 1.4; display: flex; gap: 8px; align-items: center; }
+        .security-alert { background: rgba(218, 54, 51, 0.1); border: 1px solid var(--danger); color: #ff7b72; padding: 12px; border-radius: 8px; font-size: 0.85rem; display: flex; gap: 10px; align-items: start; line-height: 1.5; }
 
+        /* الرادار والجدول */
         .smart-radar { background: linear-gradient(135deg, rgba(56, 139, 253, 0.15), rgba(22, 27, 34, 1)); border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 25px; display: none; box-shadow: 0 0 20px rgba(88, 166, 255, 0.1); }
         .radar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .radar-status { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -53,62 +57,60 @@
         .radar-time { font-size: 0.9rem; color: var(--muted); background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; display: inline-block; }
         .radar-countdown { font-size: 0.85rem; color: var(--success); margin-top: 8px; font-weight: bold; }
 
-        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        h2 { margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
-
         .schedule-list { display: flex; flex-direction: column; gap: 15px; }
         
-        .day-card { display: flex; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .day-card { display: flex; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: 0.4s; }
         .day-side { width: 90px; background: rgba(255,255,255,0.02); border-left: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; text-align: center; }
         .day-content { flex: 1; padding: 15px; }
 
-        .active-card { border-color: var(--accent); transform: scale(1.03); box-shadow: 0 10px 30px -10px var(--glow); z-index: 5; background: linear-gradient(to left, var(--card-bg), rgba(88, 166, 255, 0.05)); }
+        /* البطاقة النشطة (تصميم مميز) */
+        .active-card { 
+            border: 2px solid var(--accent); 
+            transform: scale(1.02); 
+            box-shadow: 0 0 25px var(--glow); 
+            background: linear-gradient(to bottom right, var(--card-bg), rgba(88, 166, 255, 0.08)); 
+            z-index: 5; 
+        }
         .active-card .day-side { background: var(--accent); color: white; border: none; }
         .active-card .day-name, .active-card .day-date { color: white !important; }
+        /* الوقت الكبير في البطاقة النشطة */
+        .big-time-display {
+            font-size: 1.8rem; font-weight: bold; color: var(--text); 
+            text-align: center; margin: 10px 0; background: rgba(0,0,0,0.2); 
+            padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+        }
         
         .past-card { opacity: 0.6; filter: grayscale(1); order: 100; transform: scale(0.98); }
 
-        .day-name { font-weight: bold; font-size: 0.9rem; color: var(--accent); margin-bottom: 4px; }
-        .day-date { font-size: 0.75rem; color: var(--muted); font-family: monospace; }
-        
         .lecture-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 10px 12px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .lecture-item:last-child { margin-bottom: 0; }
-        
         .lec-title { font-size: 0.95rem; font-weight: 600; display: block; margin-bottom: 5px; }
         .lec-meta { font-size: 0.75rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; }
-        .lec-meta div { display: flex; align-items: center; gap: 5px; }
 
-        .btn-install { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; display: none; font-weight: bold; transition: 0.2s; }
-        .btn-install:hover { background: var(--accent); color: white; }
-
-        #smart-pointer { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(13, 17, 23, 0.95); border: 1px solid var(--accent); padding: 15px 25px; border-radius: 30px; z-index: 2000; display: none; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 0 30px var(--glow); cursor: pointer; animation: float 2s infinite ease-in-out; }
-        #smart-pointer span { color: var(--text); font-size: 0.9rem; }
-        @keyframes float { 0%, 100% { transform: translate(-50%, -50%); } 50% { transform: translate(-50%, -60%); } }
-
-        footer { margin-top: auto; width: 100%; padding: 20px 0; border-top: 1px solid var(--border); text-align: center; background: rgba(22, 27, 34, 0.5); }
-        .support-btn { background: transparent; border: none; cursor: pointer; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 0 auto; transition: 0.3s; }
-        .support-btn:hover { color: var(--accent); transform: scale(1.1); }
-        .support-btn svg { width: 24px; height: 24px; fill: currentColor; }
-        .support-text { font-size: 0.75rem; }
-
-        #contact-modal { position: fixed; bottom: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; display: none; justify-content: center; align-items: flex-end; }
-        .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 25px; animation: slideUp 0.3s ease; border-top: 2px solid var(--accent); }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-header { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; text-align: center; color: var(--text); }
-        .contact-option { display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; color: var(--text); text-decoration: none; }
-        .contact-option:hover { background: rgba(88, 166, 255, 0.1); }
-        .contact-option svg { fill: var(--accent); width: 20px; height: 20px; }
-        .close-modal { width: 100%; padding: 15px; background: transparent; border: none; color: var(--muted); margin-top: 10px; cursor: pointer; }
-
-        #update-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; border: 1px solid var(--accent); border-radius: 8px; padding: 15px; width: 90%; max-width: 400px; z-index: 4000; box-shadow: 0 4px 20px rgba(0,0,0,0.5); display: none; text-align: center; }
-        #update-btn { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
-
-        @media (max-width: 600px) {
-            .container { width: 94%; }
-            .lecture-item { flex-direction: column; align-items: flex-start; gap: 6px; }
-            .links-grid { grid-template-columns: 1fr 1fr; }
-            .day-side { width: 70px; padding: 5px; }
+        /* المؤشر الذكي (أسفل الشاشة) */
+        #smart-pointer { 
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); 
+            background: rgba(88, 166, 255, 0.9); color: white; border: none;
+            padding: 12px 25px; border-radius: 30px; z-index: 2000; 
+            display: none; align-items: center; gap: 10px; 
+            box-shadow: 0 5px 20px rgba(88, 166, 255, 0.4); cursor: pointer; 
+            animation: bounce 2s infinite; font-weight: bold; font-size: 0.9rem;
         }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-10px);} 60% {transform: translateX(-50%) translateY(-5px);} }
+
+        /* أداة التركيز (Focus Mode) */
+        .focus-widget { text-align: center; padding: 20px; border-top: 1px solid var(--border); margin-top: 20px; }
+        .timer-display { font-size: 2.5rem; font-weight: bold; color: var(--text); font-family: monospace; margin: 10px 0; }
+        .focus-btn { background: var(--success); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 1rem; }
+
+        footer { position: fixed; bottom: 0; width: 100%; height: 60px; background: rgba(22, 27, 34, 0.95); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(10px); z-index: 100; }
+        .nav-btn { background: transparent; border: none; color: var(--muted); font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+        .nav-btn.active { color: var(--accent); }
+        .nav-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+        #update-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1f2937; border: 1px solid var(--accent); border-radius: 8px; padding: 15px; width: 90%; max-width: 400px; z-index: 4000; box-shadow: 0 4px 20px rgba(0,0,0,0.5); display: none; text-align: center; }
+        #update-btn { background: var(--accent); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        @media (max-width: 600px) { .container { width: 94%; } }
     </style>
 </head>
 <body>
@@ -119,81 +121,21 @@
 </div>
 
 <div id="smart-pointer" onclick="scrollToActive()">
-    <svg class="icon-svg" style="fill:var(--accent); width:30px; height:30px;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-    <span>متابعة محاضرات اليوم</span>
+    <span>⬇️ الانتقال للمحاضرة القادمة</span>
 </div>
 
-<div id="contact-modal">
-    <div class="modal-content">
-        <div class="modal-header">كيف يمكننا مساعدتك؟</div>
-        <a href="mailto:ali.dev.3662@gmail.com?subject=تحديث في الجدول الدراسي" class="contact-option">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-            <div>تعديل في الجدول</div>
-        </a>
-        <a href="mailto:ali.dev.3662@gmail.com?subject=مشكلة تقنية في التطبيق" class="contact-option">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-            <div>مشكلة تقنية</div>
-        </a>
-        <a href="mailto:ali.dev.3662@gmail.com?subject=استفسار عام" class="contact-option">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
-            <div>استفسار آخر</div>
-        </a>
-        <button class="close-modal" onclick="closeContactModal()">إلغاء</button>
+<div class="ticker-wrap" id="ticker-wrap">
+    <div class="ticker" id="ticker-text">
+        جاري تحميل الأخبار...
     </div>
 </div>
 
-<div class="ticker-wrap">
-    <div class="ticker">
-        تنبيه: هذا التطبيق مبادرة طلابية لتنظيم الوقت ولا يتبع للجامعة رسمياً.
-    </div>
+<div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('schedule')">الجدول الدراسي</button>
+    <button class="tab-btn" onclick="switchTab('guide')">دليل الطالب</button>
 </div>
 
-<div class="container">
-    
-    <div class="info-card">
-        <div class="info-title">
-            <svg class="icon-svg" style="fill:var(--accent)" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            بيانات الدخول الافتراضية
-        </div>
-        <div class="login-row">
-            <span class="login-label">اسم المستخدم</span>
-            <span class="login-val">الرقم الجامعي</span>
-        </div>
-        <div class="login-row">
-            <span class="login-label">كلمة المرور</span>
-            <span class="login-val">رقم السجل المدني</span>
-        </div>
-        <div class="security-note">
-            <svg class="icon-svg" style="fill:#ff7b72; min-width:18px" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            <div>هام: يجب تغيير كلمة المرور فوراً من البوابة لضمان حماية حسابك من الاختراق.</div>
-        </div>
-    </div>
-
-    <div class="info-card">
-        <div class="info-title">
-            <svg class="icon-svg" style="fill:var(--accent)" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-            روابط سريعة
-        </div>
-        <div class="links-grid">
-            <a href="https://edug.ju.edu.sa/ju/init" target="_blank" class="btn-link">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                البوابة
-            </a>
-            <a href="https://lms.ju.edu.sa/" target="_blank" class="btn-link">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
-                بلاك بورد
-            </a>
-            <a href="https://apps.apple.com/us/app/blackboard/id950424861" target="_blank" class="btn-link">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.74.79 0 1.96-.71 3.28-.68 1.12.02 1.96.47 2.51 1.12-2.68 1.54-2.03 5.42.5 6.43-.53 1.63-1.2 3.23-2.18 4.21-.02.02-.38.56-1.19 1.15z"/></svg>
-                iOS
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.blackboard.android.bbstudent" target="_blank" class="btn-link">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 20.5v-9L1.4 10l.1-.1c.3-.3.8-.4 1.2-.2l.3.2V20c0 .3.2.5.5.5h13.2c.2 0 .5-.2.5-.5v-8.8l.2-.1c.4-.2.9-.1 1.2.2l.1.1-1.6 1.6v8.9c0 1.1-.9 2-2 2H5.5c-1.1 0-2-.9-2-2zm4.1-8.3c.1-.1.3-.1.4-.1.1 0 .3 0 .4.1l4 2.3 4-2.3c.1-.1.3-.1.4-.1.1 0 .3 0 .4.1l3.5 2V5.5c0-1.1-.9-2-2-2H5.5c-1.1 0-2-.9-2-2v8.7l3.6-2.03z"/></svg>
-                Android
-            </a>
-        </div>
-    </div>
-
+<div id="schedule-container" class="container active-content">
     <div id="smart-radar" class="smart-radar">
         <div class="radar-header">
             <span class="radar-status" id="radar-status">...</span>
@@ -204,23 +146,58 @@
         <div id="radar-countdown" class="radar-countdown">--</div>
     </div>
 
-    <div class="header-actions">
-        <h2>
-            <svg class="icon-svg" style="fill:var(--text); width:24px; height:24px" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-            الجدول الدراسي
-        </h2>
-        <button id="install-btn" class="btn-install">تثبيت التطبيق</button>
-    </div>
-
     <div class="schedule-list" id="schedule-list">
         </div>
+</div>
 
+<div id="guide-container" class="container">
+    <div class="info-card">
+        <div class="info-title">
+            <svg class="icon-svg" style="fill:var(--accent)" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            بيانات الدخول الافتراضية
+        </div>
+        <div class="login-box">
+            <div class="login-row">
+                <span class="login-label">اسم المستخدم</span>
+                <span class="login-val">الرقم الجامعي</span>
+            </div>
+            <div class="login-row">
+                <span class="login-label">كلمة المرور</span>
+                <span class="login-val">رقم السجل المدني</span>
+            </div>
+        </div>
+        <div class="security-alert">
+            <svg class="icon-svg" style="fill:#ff7b72; min-width:20px" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <div><strong>تنبيه هام:</strong> هذه هي البيانات الافتراضية. يجب عليك تغيير كلمة المرور فوراً من البوابة الإلكترونية لضمان عدم اختراق حسابك.</div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-title">أداة التركيز (Pomodoro)</div>
+        <div class="focus-widget">
+            <div class="timer-display" id="focus-timer">25:00</div>
+            <button class="focus-btn" onclick="toggleFocus()">بدء المذاكرة</button>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:10px">خصص 25 دقيقة من التركيز التام بدون مقاطعة.</p>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <div class="info-title">روابط تهمك</div>
+        <div style="display:grid; gap:10px;">
+            <a href="https://edug.ju.edu.sa/ju/init" target="_blank" style="color:var(--accent); text-decoration:none;">🔗 البوابة الإلكترونية</a>
+            <a href="https://lms.ju.edu.sa/" target="_blank" style="color:var(--accent); text-decoration:none;">🔗 بلاك بورد ويب</a>
+        </div>
+    </div>
 </div>
 
 <footer>
-    <button class="support-btn" onclick="openContactModal()">
+    <button class="nav-btn" onclick="openContact()">
         <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        <span class="support-text">تواصل معنا</span>
+        <span>تواصل</span>
+    </button>
+    <button class="nav-btn" id="install-btn" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M4 16v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3h-2v3H6v-3H4zm6.5-6V3h3v7h4l-5.5 5.5L7 10h3.5z"/></svg>
+        <span>تثبيت</span>
     </button>
 </footer>
 
@@ -232,7 +209,6 @@
         { code: "ADCY 1112", name: "أمن سيبراني", color: "#f43f5e", lecturer: "د. عمرو عبدالواحد" },
         { code: "ADCY 1113", name: "رياضيات الحاسب", color: "#8b5cf6", lecturer: "د. أسامة رزق شاهين" }
     ];
-    
     const scheduleData = [
         { dayOffset: 0, dayName: "الأحد", lectures: [{ cIdx: 1, s: "15:00", e: "16:50" }, { cIdx: 2, s: "17:00", e: "17:50" }, { cIdx: 0, s: "18:00", e: "19:50" }] },
         { dayOffset: 1, dayName: "الإثنين", lectures: [{ cIdx: 3, s: "15:00", e: "16:50" }, { cIdx: 4, s: "17:00", e: "18:50" }] },
@@ -241,11 +217,48 @@
         { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
     ];
 
-    function getSundayDate() { 
-        const d = new Date(); const day = d.getDay(); 
-        const diff = d.getDate() - day; return new Date(d.setDate(diff)); 
+    function getSundayDate() { const d = new Date(); const day = d.getDay(); const diff = d.getDate() - day; return new Date(d.setDate(diff)); }
+
+    // === جلب الرسائل من ملف خارجي ===
+    function loadMessages() {
+        fetch('messages.json')
+            .then(response => response.json())
+            .then(data => {
+                const tickerText = document.getElementById('ticker-text');
+                const tickerWrap = document.getElementById('ticker-wrap');
+                const messages = data.messages;
+                
+                // البحث عن رسالة تنبيه
+                const alertMsg = messages.find(m => m.type === 'alert');
+                
+                if (alertMsg) {
+                    tickerText.innerHTML = `🔥 ${alertMsg.text}`;
+                    tickerText.classList.add('alert-mode');
+                    tickerWrap.classList.add('alert-bg');
+                    
+                    // بعد المدة المحددة نعود للرسالة العادية
+                    if (alertMsg.duration > 0) {
+                        setTimeout(() => {
+                            const normalMsg = messages.find(m => m.type === 'normal');
+                            if(normalMsg) {
+                                tickerText.innerHTML = normalMsg.text;
+                                tickerText.classList.remove('alert-mode');
+                                tickerWrap.classList.remove('alert-bg');
+                            }
+                        }, alertMsg.duration);
+                    }
+                } else {
+                    // رسالة عادية
+                    const normalMsg = messages.find(m => m.type === 'normal');
+                    if(normalMsg) tickerText.innerHTML = normalMsg.text;
+                }
+            })
+            .catch(err => {
+                document.getElementById('ticker-text').innerHTML = "جدول الأمن السيبراني - مبادرة طلابية";
+            });
     }
 
+    // === ترتيب الجدول ===
     function getSortedSchedule() {
         const now = new Date();
         const currentDayIndex = now.getDay();
@@ -254,28 +267,17 @@
         let todayData = scheduleData.find(d => d.dayOffset === currentDayIndex);
         if (todayData) {
             let lastLec = todayData.lectures[todayData.lectures.length - 1];
-            let end = new Date(now);
-            let [eh, em] = lastLec.e.split(':');
-            end.setHours(eh, em, 0);
+            let end = new Date(now); let [eh, em] = lastLec.e.split(':'); end.setHours(eh, em, 0);
             if (now > end) todayIsDone = true;
-        } else if (!todayData) {
-             todayIsDone = true; 
-        }
+        } else if (!todayData) todayIsDone = true;
 
         let processedData = scheduleData.map(day => {
             let currentDayDate = new Date(getSundayDate());
             currentDayDate.setDate(getSundayDate().getDate() + day.dayOffset);
-            let endOfDay = new Date(currentDayDate);
-            endOfDay.setHours(23, 59, 59);
-
+            let endOfDay = new Date(currentDayDate); endOfDay.setHours(23, 59, 59);
             let isPastDate = now.getDate() > currentDayDate.getDate() && now.getMonth() === currentDayDate.getMonth();
             let isTodayFinished = (day.dayOffset === currentDayIndex && todayIsDone);
-            
-            return {
-                ...day,
-                isDone: isPastDate || isTodayFinished,
-                dateObj: currentDayDate
-            };
+            return { ...day, isDone: isPastDate || isTodayFinished, dateObj: currentDayDate };
         });
 
         return processedData.sort((a, b) => {
@@ -285,43 +287,37 @@
     }
 
     function renderSchedule() {
-        const container = document.getElementById('schedule-list');
-        container.innerHTML = '';
-        const now = new Date();
-        const sortedData = getSortedSchedule();
-        const activeItem = sortedData[0];
+        const container = document.getElementById('schedule-list'); container.innerHTML = '';
+        const now = new Date(); const sortedData = getSortedSchedule();
+        const activeItem = sortedData[0]; // أول عنصر هو القادم
 
         sortedData.forEach((day) => {
             const isActive = (day === activeItem && !day.isDone);
-            
             const card = document.createElement('div');
             card.className = `day-card ${isActive ? 'active-card' : ''} ${day.isDone ? 'past-card' : ''}`;
-            if(isActive) card.id = 'active-card-scroll';
+            if(isActive) card.id = 'active-card-scroll'; // تعيين المعرف للبطاقة النشطة
 
-            const userIcon = `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
-            const timeIcon = `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`;
-
-            let lecturesHTML = '';
-            if(day.lectures.length === 0) lecturesHTML = '<span style="color:#666; font-size:0.8rem;">لا توجد محاضرات</span>';
-            else {
-                lecturesHTML = day.lectures.map(lec => {
-                    const c = courses[lec.cIdx];
-                    const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
-                    
-                    let lEnd = new Date(day.dateObj); let [eh, em] = lec.e.split(':'); lEnd.setHours(eh, em, 0);
-                    let isLecPast = now > lEnd;
-                    
-                    return `
-                    <div class="lecture-item ${isLecPast ? 'lecture-past' : ''}">
-                        <div class="lec-info" style="width:100%">
-                            <span class="lec-title" style="color:${isLecPast ? '#666' : c.color}">${c.name}</span>
-                            <div class="lec-meta">
-                                <div>${userIcon} ${c.lecturer}</div>
-                                <div>${timeIcon} ${formatTime(lec.s)} - ${formatTime(lec.e)}</div>
-                            </div>
+            let lecturesHTML = day.lectures.map(lec => {
+                const c = courses[lec.cIdx];
+                const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
+                return `
+                <div class="lecture-item">
+                    <div class="lec-info" style="width:100%">
+                        <span class="lec-title" style="color:${c.color}">${c.name}</span>
+                        <div class="lec-meta">
+                            <div>👤 ${c.lecturer}</div>
+                            <div>⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</div>
                         </div>
-                    </div>`;
-                }).join('');
+                    </div>
+                </div>`;
+            }).join('');
+
+            // إضافة الوقت الكبير للبطاقة النشطة
+            let bigTime = '';
+            if (isActive && day.lectures.length > 0) {
+                const firstLec = day.lectures[0];
+                const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
+                bigTime = `<div class="big-time-display">${formatTime(firstLec.s)}</div>`;
             }
 
             card.innerHTML = `
@@ -330,6 +326,7 @@
                     <div class="day-date">${day.dateObj.toLocaleDateString('en-GB', {day:'numeric', month:'numeric'})}</div>
                 </div>
                 <div class="day-content">
+                    ${bigTime}
                     ${lecturesHTML}
                 </div>
             `;
@@ -337,77 +334,90 @@
         });
     }
 
+    // === التنقل بين التبويبات ===
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active-content'));
+        
+        if (tabId === 'schedule') {
+            document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+            document.getElementById('schedule-container').classList.add('active-content');
+        } else {
+            document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+            document.getElementById('guide-container').classList.add('active-content');
+        }
+    }
+
+    // === المؤشر الذكي ===
     let idleTimer;
     function resetTimer() {
         clearTimeout(idleTimer);
         document.getElementById('smart-pointer').style.display = 'none';
-        idleTimer = setTimeout(() => {
-            if(document.querySelector('.active-card')) {
-                document.getElementById('smart-pointer').style.display = 'flex';
-            }
-        }, 10000); 
+        
+        // يظهر فقط إذا كنا في تبويب الجدول
+        if (document.getElementById('schedule-container').classList.contains('active-content')) {
+            idleTimer = setTimeout(() => {
+                if(document.querySelector('.active-card')) {
+                    document.getElementById('smart-pointer').style.display = 'flex';
+                }
+            }, 10000); 
+        }
     }
-    window.onload = resetTimer;
-    window.onmousemove = resetTimer;
-    window.ontouchstart = resetTimer;
-    window.onclick = resetTimer;
-
+    
     function scrollToActive() {
         const el = document.getElementById('active-card-scroll');
         if(el) {
             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            resetTimer(); 
+            // إخفاء الزر بعد الضغط
+            document.getElementById('smart-pointer').style.display = 'none';
         }
     }
 
-    function updateRadar() {
-        const radarEl = document.getElementById('smart-radar'); const now = new Date(); const dayIdx = now.getDay();
-        let found = null; let status = "";
-        let todayData = scheduleData.find(d => d.dayOffset === dayIdx);
-        if (todayData) {
-            for (let lec of todayData.lectures) {
-                let s = new Date(now); let [sh, sm] = lec.s.split(':'); s.setHours(sh, sm, 0);
-                let e = new Date(now); let [eh, em] = lec.e.split(':'); e.setHours(eh, em, 0);
-                if (now >= s && now <= e) { found = { ...lec, tObj: e }; status = "جارية الآن"; break; }
-                else if (now < s) { found = { ...lec, tObj: s }; status = "اليوم"; break; }
-            }
-        }
-        if (!found) {
-            for (let i = 1; i <= 7; i++) {
-                let nextIdx = (dayIdx + i) % 7; let nextDayData = scheduleData.find(d => d.dayOffset === nextIdx);
-                if (nextDayData && nextDayData.lectures.length > 0) {
-                    let firstLec = nextDayData.lectures[0]; let nextDate = new Date(now); nextDate.setDate(now.getDate() + i);
-                    let [sh, sm] = firstLec.s.split(':'); nextDate.setHours(sh, sm, 0);
-                    found = { ...firstLec, tObj: nextDate }; status = `القادمة (${nextDayData.dayName})`; break;
+    ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => window.addEventListener(evt, resetTimer));
+
+    // === المؤقت (Pomodoro) ===
+    let focusInterval;
+    let isFocusing = false;
+    function toggleFocus() {
+        const display = document.getElementById('focus-timer');
+        const btn = document.querySelector('.focus-btn');
+        
+        if (isFocusing) {
+            clearInterval(focusInterval);
+            display.innerText = "25:00";
+            btn.innerText = "بدء المذاكرة";
+            btn.style.background = "var(--success)";
+            isFocusing = false;
+        } else {
+            let time = 25 * 60;
+            isFocusing = true;
+            btn.innerText = "إيقاف";
+            btn.style.background = "var(--danger)";
+            
+            focusInterval = setInterval(() => {
+                const m = Math.floor(time / 60);
+                const s = time % 60;
+                display.innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                time--;
+                if (time < 0) {
+                    clearInterval(focusInterval);
+                    alert("انتهى وقت التركيز! خذ استراحة.");
+                    isFocusing = false;
+                    btn.innerText = "بدء المذاكرة";
                 }
-            }
-        }
-        if (found) {
-            radarEl.style.display = 'block'; document.getElementById('radar-status').innerText = status;
-            document.getElementById('radar-course').innerText = courses[found.cIdx].name;
-            const ft = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ap = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ap}`; };
-            document.getElementById('radar-time').innerText = `${ft(found.s)} - ${ft(found.e)}`;
-            let diff = found.tObj - now;
-            if (diff > 0) {
-                let h = Math.floor(diff / (1000 * 60 * 60)); let m = Math.floor((diff / 1000 / 60) % 60);
-                document.getElementById('radar-countdown').innerText = status.includes("جارية") ? `متبقي ${h}س ${m}د` : `تبدأ خلال ${h}س ${m}د`;
-            } else { document.getElementById('radar-countdown').innerText = "الآن"; }
+            }, 1000);
         }
     }
 
-    function openContactModal() { document.getElementById('contact-modal').style.display = 'flex'; }
-    function closeContactModal() { document.getElementById('contact-modal').style.display = 'none'; }
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('contact-modal')) {
-            closeContactModal();
-        }
+    function openContact() {
+        window.location.href = "mailto:ali.dev.3662@gmail.com";
     }
 
-    let newWorker;
+    // التحديث
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').then(reg => {
             reg.addEventListener('updatefound', () => {
-                newWorker = reg.installing;
+                const newWorker = reg.installing;
                 newWorker.addEventListener('statechange', () => {
                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                         document.getElementById('update-toast').style.display = 'block';
@@ -417,19 +427,29 @@
         });
     }
     document.getElementById('update-btn').addEventListener('click', () => {
-        if (newWorker) newWorker.postMessage({ action: 'skipWaiting' });
-    });
-    let refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
+        navigator.serviceWorker.getRegistration().then(reg => {
+            if (reg.waiting) reg.waiting.postMessage({ action: 'skipWaiting' });
+        });
         window.location.reload();
-        refreshing = true;
     });
 
-    let deferredPrompt; const installBtn = document.getElementById('install-btn');
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block'; installBtn.onclick = () => { installBtn.style.display = 'none'; deferredPrompt.prompt(); }; });
+    // PWA Install Button
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'flex';
+        installBtn.onclick = () => {
+            installBtn.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choice) => { deferredPrompt = null; });
+        };
+    });
 
-    renderSchedule(); updateRadar(); setInterval(updateRadar, 60000); setInterval(renderSchedule, 60000);
+    renderSchedule();
+    loadMessages();
 </script>
 </body>
 </html>
+
