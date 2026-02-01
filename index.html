@@ -14,7 +14,6 @@
             --accent: #58a6ff;
             --success: #238636;
             --muted: #8b949e;
-            --danger: #da3633;
         }
 
         body {
@@ -22,14 +21,14 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 40px;
             display: flex;
             justify-content: center;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
         }
 
         .header-actions {
@@ -39,15 +38,15 @@
             margin-bottom: 30px;
         }
 
-        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem; }
+        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.8rem; }
 
         /* زر التقويم */
         .btn-add { 
             background: rgba(35, 134, 54, 0.1);
             color: var(--success); 
             border: 1px solid var(--border); 
-            font-size: 0.75rem; 
-            padding: 6px 10px;
+            font-size: 0.8rem; 
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-family: inherit;
@@ -55,19 +54,10 @@
             align-items: center;
             gap: 6px;
             transition: 0.2s;
-            white-space: nowrap;
         }
         .btn-add:hover { 
             background: rgba(35, 134, 54, 0.2); 
             border-color: var(--success); 
-        }
-
-        /* زر منتهي الصلاحية (للمحاضرات السابقة) */
-        .btn-disabled {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--muted);
-            border-color: transparent;
-            cursor: not-allowed;
         }
 
         table {
@@ -81,14 +71,13 @@
 
         th {
             background: #21262d;
-            padding: 12px;
+            padding: 15px;
             text-align: right;
             border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
         }
 
         td {
-            padding: 12px;
+            padding: 15px;
             border-bottom: 1px solid var(--border);
             vertical-align: top;
         }
@@ -96,7 +85,7 @@
         tr:last-child td { border-bottom: none; }
 
         .day-col {
-            width: 100px;
+            width: 120px;
             font-weight: bold;
             color: var(--accent);
             background: rgba(255,255,255,0.02);
@@ -106,9 +95,9 @@
         }
 
         .date-sub {
-            font-size: 0.7rem; 
+            font-size: 0.75rem; 
             color: var(--muted); 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             font-family: monospace;
             direction: ltr;
         }
@@ -116,44 +105,72 @@
         .lecture-item {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border);
-            padding: 10px;
-            margin-bottom: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
             border-radius: 6px;
             border-right: 3px solid transparent;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative; /* مهم لتموضع العناصر */
+            transition: 0.3s;
         }
 
-        .lecture-info h4 { margin: 0 0 5px 0; font-size: 0.9rem; }
-        
-        .lecture-meta { 
-            font-size: 0.8rem; 
-            color: var(--muted); 
-            display: flex; 
-            flex-wrap: wrap;
-            gap: 10px; 
+        /* تنسيق المحاضرة المنتهية */
+        .lecture-past {
+            opacity: 0.5; /* شفافية */
+            filter: grayscale(1); /* تحويل لأبيض وأسود */
+            background: #090c10; /* خلفية أغمق */
+            border-color: #21262d;
+            border-right-color: #30363d !important; /* إلغاء لون المادة */
         }
 
-        .meta-row {
+        /* شارة "انتهت" */
+        .ended-badge {
+            background: #21262d;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 4px;
         }
 
+        .lecture-info h4 { margin: 0 0 8px 0; font-size: 1rem; }
+        
+        .lecture-meta { 
+            font-size: 0.85rem; 
+            color: var(--muted); 
+            display: flex; 
+            flex-wrap: wrap;
+            gap: 15px; 
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .icon-svg {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             fill: currentColor;
             opacity: 0.8;
         }
 
-        /* تحسينات للجوال */
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .lecture-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .day-col { width: 85px; font-size: 0.9rem; }
-            h2 { font-size: 1.2rem; }
+            .lecture-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .day-col { width: 90px; }
+            /* في الجوال نضع شارة انتهت في الأعلى */
+            .lecture-past .ended-badge {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+            }
         }
     </style>
 </head>
@@ -162,7 +179,7 @@
 <div class="container">
     <div class="header-actions">
         <h2>
-            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <svg class="icon-svg" style="width:28px; height:28px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
             الجدول الدراسي
         </h2>
     </div>
@@ -197,10 +214,10 @@
         { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
     ];
 
-    // 2. دالة حساب الأحد (بداية الأسبوع الحالي)
+    // 2. دالة حساب الأحد
     function getSundayDate() {
         const d = new Date();
-        const day = d.getDay(); // 0 = Sunday
+        const day = d.getDay();
         const diff = d.getDate() - day; 
         return new Date(d.setDate(diff));
     }
@@ -208,23 +225,11 @@
     // 3. بناء الجدول
     const tableBody = document.getElementById('table-body');
     const sunday = getSundayDate();
-    const now = new Date(); // الوقت الحالي
 
     scheduleData.forEach((day) => {
         let currentDayDate = new Date(sunday);
         currentDayDate.setDate(sunday.getDate() + day.dayOffset);
         
-        // التحقق مما إذا كان اليوم بالكامل في الماضي
-        // نجعل وقته نهاية اليوم للمقارنة
-        let endOfDay = new Date(currentDayDate);
-        endOfDay.setHours(23, 59, 59);
-        const isPastDay = now > endOfDay;
-
-        // حالة الزر (نشط أو معطل)
-        let btnClass = isPastDay ? 'btn-add btn-disabled' : 'btn-add';
-        let btnText = isPastDay ? 'انتهى' : 'تقويم';
-        let btnAction = isPastDay ? '' : `onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})'`;
-
         const tr = document.createElement('tr');
 
         // عمود اليوم
@@ -233,9 +238,9 @@
         dayTd.innerHTML = `
             <div>${day.dayName}</div>
             <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
-            <button ${btnAction} class="${btnClass}">
+            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn-add">
                 <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                ${btnText}
+                تقويم
             </button>
         `;
         tr.appendChild(dayTd);
@@ -243,33 +248,45 @@
         // عمود المحاضرات
         const lecTd = document.createElement('td');
         if(day.lectures.length === 0) {
-            lecTd.innerHTML = '<span style="color:#666; font-size:0.9rem;">لا توجد محاضرات</span>';
+            lecTd.innerHTML = '<span style="color:#666">لا توجد محاضرات</span>';
         } else {
             day.lectures.forEach(lec => {
                 const c = courses[lec.cIdx];
                 const div = document.createElement('div');
-                div.className = 'lecture-item';
-                div.style.borderRightColor = c.color;
-
-                // التحقق من حالة المحاضرة (جارية/منتهية) لتغيير شكلها قليلاً
+                const now = new Date();
+                
+                // حساب وقت انتهاء المحاضرة
                 let lecEnd = new Date(currentDayDate);
                 let [eh, em] = lec.e.split(':');
                 lecEnd.setHours(parseInt(eh), parseInt(em), 0);
+
+                // التحقق: هل انتهت؟
+                const isFinished = now > lecEnd;
                 
-                // إذا انتهت المحاضرة نجعلها باهتة
-                if (now > lecEnd) {
-                    div.style.opacity = '0.5';
-                }
-                
+                // تحديد الكلاس
+                div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
+                div.style.borderRightColor = isFinished ? '' : c.color; // إزالة اللون إذا انتهت
+
                 const formatTime = (t) => {
                     let [h, m] = t.split(':'); h=parseInt(h);
                     let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
                     return `${h}:${m} ${ampm}`;
                 };
 
+                // محتوى البطاقة (نضيف شارة "انتهت" إذا كانت منتهية، أو مكان الدوام إذا لا)
+                const statusHTML = isFinished 
+                    ? `<div class="ended-badge">
+                        <svg class="icon-svg" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                        انتهت
+                       </div>`
+                    : `<div style="font-size:0.8rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:5px;">
+                        <svg class="icon-svg" style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                        عن بعد - Blackboard
+                       </div>`;
+
                 div.innerHTML = `
                     <div class="lecture-info">
-                        <h4>${c.name} <span style="font-size:0.8em; color:${c.color}">(${c.code})</span></h4>
+                        <h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4>
                         <div class="lecture-meta">
                             <div class="meta-row">
                                 <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -280,10 +297,7 @@
                                 <span>${formatTime(lec.s)} - ${formatTime(lec.e)}</span>
                             </div>
                         </div>
-                        <div style="font-size:0.75rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:4px;">
-                            <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                            عن بعد - Blackboard
-                        </div>
+                        ${statusHTML}
                     </div>
                 `;
                 lecTd.appendChild(div);
@@ -293,7 +307,7 @@
         tableBody.appendChild(tr);
     });
 
-    // 4. إضافة للتقويم (فلترة ذكية)
+    // 4. إضافة للتقويم
     function addToCalendar(lectures, dayOffset) {
         let targetDate = new Date(sunday);
         targetDate.setDate(sunday.getDate() + dayOffset);
@@ -314,17 +328,13 @@
             let [eh, em] = lec.e.split(':');
             endDt.setHours(parseInt(eh), parseInt(em), 0);
 
-            // ⚠️ التعديل المهم: تجاهل المحاضرات التي انتهى وقتها تماماً
-            if (now > endDt) {
-                return; // لا تضفها
-            }
+            if (now > endDt) return; // تجاهل المنتهي
 
             addedCount++;
             
             let summary = course.name;
             let description = `المحاضر: ${course.lecturer}`;
             
-            // إذا كانت جارية الآن
             if (now >= startDt && now <= endDt) {
                 summary = `[جارية الآن] ${course.name}`;
             }
@@ -344,7 +354,7 @@
         icsContent += "END:VCALENDAR";
 
         if (addedCount === 0) {
-            alert("جميع محاضرات هذا اليوم انتهت! 🏁\nلا يوجد شيء لإضافته للتقويم.");
+            alert("جميع محاضرات هذا اليوم انتهت! 🏁");
             return;
         }
 
