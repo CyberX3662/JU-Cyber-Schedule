@@ -1,8 +1,9 @@
-const CACHE_NAME = 'cyber-schedule-v10-mandatory'; // التحديث الإجباري V10
+const CACHE_NAME = 'cyber-schedule-v11-pro'; // V11 - Professional Update
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './messages.json'
 ];
 
 self.addEventListener('install', event => {
