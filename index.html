@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الجدول الدراسي</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         :root {
@@ -34,36 +33,32 @@
 
         .header-actions {
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* توسيط العنوان */
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        h2 { margin: 0; display: flex; align-items: center; gap: 10px; }
+        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.8rem; }
 
-        .btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 15px;
+        /* تنسيق زر التقويم الصغير */
+        .btn-add { 
+            background: rgba(35, 134, 54, 0.1);
+            color: var(--success); 
+            border: 1px solid var(--border); 
+            font-size: 0.8rem; 
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             transition: 0.2s;
         }
-
-        .btn:hover { border-color: var(--accent); color: var(--accent); }
-        
-        .btn-add { 
-            color: var(--success); 
-            border-color: var(--border); 
-            font-size: 0.8rem; 
-            padding: 4px 10px;
+        .btn-add:hover { 
+            background: rgba(35, 134, 54, 0.2); 
+            border-color: var(--success); 
         }
-        .btn-add:hover { background: rgba(35, 134, 54, 0.1); border-color: var(--success); }
 
         table {
             width: 100%;
@@ -102,7 +97,7 @@
         .date-sub {
             font-size: 0.75rem; 
             color: var(--muted); 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             font-family: monospace;
             direction: ltr;
         }
@@ -110,8 +105,8 @@
         .lecture-item {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border);
-            padding: 12px;
-            margin-bottom: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
             border-radius: 6px;
             border-right: 3px solid transparent;
             display: flex;
@@ -135,23 +130,18 @@
             gap: 6px;
         }
 
-        /* SVG Styles */
         .icon-svg {
             width: 16px;
             height: 16px;
             fill: currentColor;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
-        /* الطباعة */
-        @media print {
-            body { background: white; color: black; padding: 0; }
-            .btn, .header-actions button { display: none; }
-            table { border: 1px solid black; }
-            th { background: #eee; color: black; border-bottom: 1px solid black; }
-            td, .day-col { border-bottom: 1px solid #ccc; color: black; }
-            .lecture-item { border: 1px solid #ddd; background: white; color: black; }
-            .icon-svg { fill: black; opacity: 1; }
+        /* تحسينات للجوال */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .lecture-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .day-col { width: 90px; }
         }
     </style>
 </head>
@@ -160,13 +150,9 @@
 <div class="container">
     <div class="header-actions">
         <h2>
-            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent); opacity:1;" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <svg class="icon-svg" style="width:28px; height:28px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
             الجدول الدراسي
         </h2>
-        <button onclick="downloadPDF()" class="btn">
-            <svg class="icon-svg" style="opacity:1" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            تحميل PDF
-        </button>
     </div>
 
     <table id="schedule-table">
@@ -223,8 +209,8 @@
         dayTd.innerHTML = `
             <div>${day.dayName}</div>
             <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
-            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn btn-add">
-                <svg class="icon-svg" style="width:12px; height:12px; fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn-add">
+                <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                 تقويم
             </button>
         `;
@@ -273,17 +259,7 @@
         tableBody.appendChild(tr);
     });
 
-    // 4. تحميل PDF
-    function downloadPDF() {
-        const element = document.querySelector('.container');
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(b => b.style.display = 'none');
-        html2pdf().from(element).save('جدول_الأمن_السيبراني.pdf').then(() => {
-            buttons.forEach(b => b.style.display = ''); 
-        });
-    }
-
-    // 5. إضافة للتقويم (المنطق الذكي)
+    // 4. إضافة للتقويم (المنطق الذكي)
     function addToCalendar(lectures, dayOffset) {
         let targetDate = new Date(sunday);
         targetDate.setDate(sunday.getDate() + dayOffset);
@@ -351,4 +327,3 @@
 
 </body>
 </html>
-
