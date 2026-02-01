@@ -1,44 +1,50 @@
-const CACHE_NAME = 'cyber-schedule-v5-force-update'; // غير الاسم هنا كل مرة لضمان التحديث
+const CACHE_NAME = 'cyber-schedule-v6-force-update'; // هذا الرقم v6 سيجبر المتصفح على التحديث
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json'
 ];
 
+// 1. التثبيت (Install)
 self.addEventListener('install', event => {
-  // لا تستخدم skipWaiting هنا، دع المستخدم يقرر
+  // ننتظر حتى تكتمل عملية التخزين
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
+// 2. التفعيل (Activate) - تنظيف الكاش القديم
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
+        cacheNames
+          .filter(cacheName => cacheName !== CACHE_NAME) // نختار فقط الكاش القديم
+          .map(cacheName => {
+            return caches.delete(cacheName); // ونحذفه
+          })
       );
     })
   );
 });
 
+// 3. جلب البيانات (Fetch)
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
+        // ارجع الملف من الكاش إذا وجد، وإلا اطلبه من النت
         return response || fetch(event.request);
       })
   );
 });
 
-// هذا هو الجزء الذي ينتظر رسالة "تحديث الآن" من المستخدم
+// 4. استقبال رسالة التحديث من الصفحة (مهم جداً لزر "تحديث الآن")
 self.addEventListener('message', (event) => {
-  if (event.data.action === 'skipWaiting') {
+  if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
 });
