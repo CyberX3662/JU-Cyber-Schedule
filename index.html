@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الجدول الدراسي</title>
+    <title>بوابة الأمن السيبراني</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="apple-touch-icon" href="icon-192.png">
     
     <style>
         :root {
@@ -13,6 +16,8 @@
             --text: #e6edf3;
             --accent: #58a6ff;
             --success: #238636;
+            --danger: #da3633;
+            --warning: #d29922;
             --muted: #8b949e;
         }
 
@@ -21,183 +26,166 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 40px;
+            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 1. شريط التنبيهات المتحرك */
+        .ticker-wrap {
+            width: 100%;
+            background: rgba(210, 153, 34, 0.15);
+            border-bottom: 1px solid var(--warning);
+            overflow: hidden;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 20s linear infinite;
+            color: var(--warning);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(100%, 0, 0); } /* للغة العربية الاتجاه معكوس */
         }
 
         .container {
-            width: 100%;
-            max-width: 900px;
+            width: 90%;
+            max-width: 800px;
+            padding: 20px 0;
         }
 
-        .header-actions {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.8rem; }
-
-        /* زر التقويم */
-        .btn-add { 
-            background: rgba(35, 134, 54, 0.1);
-            color: var(--success); 
-            border: 1px solid var(--border); 
-            font-size: 0.8rem; 
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-        }
-        .btn-add:hover { 
-            background: rgba(35, 134, 54, 0.2); 
-            border-color: var(--success); 
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        th {
-            background: #21262d;
-            padding: 15px;
-            text-align: right;
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-        }
-
-        tr:last-child td { border-bottom: none; }
-
-        .day-col {
-            width: 120px;
-            font-weight: bold;
-            color: var(--accent);
-            background: rgba(255,255,255,0.02);
-            border-left: 1px solid var(--border);
+        /* 2. الرادار الذكي */
+        .smart-radar {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(35, 134, 54, 0.1));
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
             text-align: center;
-            vertical-align: middle;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
-        .date-sub {
-            font-size: 0.75rem; 
-            color: var(--muted); 
-            margin-bottom: 10px; 
-            font-family: monospace;
-            direction: ltr;
+        .radar-status { font-size: 0.85rem; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .radar-course { font-size: 1.5rem; font-weight: bold; margin: 5px 0; }
+        .radar-time { font-size: 1.1rem; color: var(--text); background: rgba(0,0,0,0.3); display: inline-block; padding: 4px 12px; border-radius: 20px; margin-top: 10px; }
+        .radar-countdown { font-size: 0.9rem; color: var(--muted); margin-top: 5px; }
+
+        /* نبض الرادار */
+        .radar-pulse {
+            position: absolute;
+            top: 10px; left: 10px;
+            width: 10px; height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(35, 134, 54, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(35, 134, 54, 0); }
         }
 
-        .lecture-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            border-right: 3px solid transparent;
+        /* الجدول (كما هو سابقاً مع تحسينات طفيفة) */
+        .header-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: relative; /* مهم لتموضع العناصر */
-            transition: 0.3s;
+            margin-bottom: 20px;
         }
-
-        /* تنسيق المحاضرة المنتهية */
-        .lecture-past {
-            opacity: 0.5; /* شفافية */
-            filter: grayscale(1); /* تحويل لأبيض وأسود */
-            background: #090c10; /* خلفية أغمق */
-            border-color: #21262d;
-            border-right-color: #30363d !important; /* إلغاء لون المادة */
-        }
-
-        /* شارة "انتهت" */
-        .ended-badge {
-            background: #21262d;
-            color: #8b949e;
-            border: 1px solid #30363d;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .lecture-info h4 { margin: 0 0 8px 0; font-size: 1rem; }
         
-        .lecture-meta { 
-            font-size: 0.85rem; 
-            color: var(--muted); 
-            display: flex; 
-            flex-wrap: wrap;
-            gap: 15px; 
+        h2 { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.4rem; }
+
+        .btn-install {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none; /* يظهر فقط إذا كان التطبيق قابل للتثبيت */
+            font-size: 0.85rem;
         }
 
-        .meta-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        /* بقية تنسيقات الجدول (نفس الكود السابق) */
+        .btn-add { 
+            background: rgba(35, 134, 54, 0.1); color: var(--success); border: 1px solid var(--border); 
+            font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; 
         }
-
-        .icon-svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-            opacity: 0.8;
-        }
+        .btn-disabled { background: rgba(255, 255, 255, 0.05); color: var(--muted); border-color: transparent; cursor: not-allowed; }
+        
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        th { background: #21262d; padding: 12px; text-align: right; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        .day-col { width: 100px; font-weight: bold; color: var(--accent); background: rgba(255,255,255,0.02); border-left: 1px solid var(--border); text-align: center; vertical-align: middle; }
+        .date-sub { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; font-family: monospace; direction: ltr; }
+        .lecture-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 10px; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; transition:0.3s;}
+        .lecture-past { opacity: 0.5; filter: grayscale(1); background: #090c10; border-right-color: #30363d !important; }
+        .ended-badge { background: #21262d; color: #8b949e; border: 1px solid #30363d; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; }
+        .lecture-info h4 { margin: 0 0 5px 0; font-size: 0.9rem; }
+        .lecture-meta { font-size: 0.8rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 10px; }
+        .meta-row { display: flex; align-items: center; gap: 4px; }
+        .icon-svg { width: 14px; height: 14px; fill: currentColor; opacity: 0.8; }
 
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .lecture-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .day-col { width: 90px; }
-            /* في الجوال نضع شارة انتهت في الأعلى */
-            .lecture-past .ended-badge {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-            }
+            .container { width: 95%; }
+            .lecture-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .day-col { width: 85px; font-size: 0.9rem; }
+            .smart-radar { padding: 15px; }
+            .radar-course { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
 
+<div class="ticker-wrap">
+    <div class="ticker">
+        📢 تنبيه هام: الاختبارات النصفية تبدأ الأسبوع القادم - يرجى مراجعة البلاك بورد للتحديثات - محاضرة اليوم مسجلة.
+    </div>
+</div>
+
 <div class="container">
+    
+    <div id="smart-radar" class="smart-radar" style="display:none;">
+        <div class="radar-pulse"></div>
+        <div class="radar-status" id="radar-status">المحاضرة القادمة</div>
+        <h3 class="radar-course" id="radar-course">جاري التحميل...</h3>
+        <div class="radar-time" id="radar-time">--:--</div>
+        <div class="radar-countdown" id="radar-countdown">--</div>
+    </div>
+
     <div class="header-actions">
         <h2>
-            <svg class="icon-svg" style="width:28px; height:28px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
             الجدول الدراسي
         </h2>
+        <button id="install-btn" class="btn-install">📲 تثبيت التطبيق</button>
     </div>
 
     <table id="schedule-table">
         <thead>
-            <tr>
-                <th>اليوم</th>
-                <th>المحاضرات</th>
-            </tr>
+            <tr><th>اليوم</th><th>المحاضرات</th></tr>
         </thead>
-        <tbody id="table-body">
-            </tbody>
+        <tbody id="table-body"></tbody>
     </table>
 </div>
 
 <script>
-    // 1. البيانات
+    // === البيانات ===
     const courses = [
         { code: "ADEN 1110", name: "اللغة الإنجليزية 1", color: "#3b82f6", lecturer: "د. جلال حابس الربيع" },
         { code: "ADIT 1110", name: "مقدمة تقنية المعلومات", color: "#06b6d4", lecturer: "د. محمود عبدالمنعم" },
@@ -214,7 +202,7 @@
         { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
     ];
 
-    // 2. دالة حساب الأحد
+    // === دوال الوقت الأساسية ===
     function getSundayDate() {
         const d = new Date();
         const day = d.getDay();
@@ -222,96 +210,174 @@
         return new Date(d.setDate(diff));
     }
 
-    // 3. بناء الجدول
+    // === 1. بناء الجدول ===
     const tableBody = document.getElementById('table-body');
     const sunday = getSundayDate();
 
-    scheduleData.forEach((day) => {
-        let currentDayDate = new Date(sunday);
-        currentDayDate.setDate(sunday.getDate() + day.dayOffset);
-        
-        const tr = document.createElement('tr');
+    function renderSchedule() {
+        tableBody.innerHTML = '';
+        const now = new Date();
 
-        // عمود اليوم
-        const dayTd = document.createElement('td');
-        dayTd.className = 'day-col';
-        dayTd.innerHTML = `
-            <div>${day.dayName}</div>
-            <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
-            <button onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})' class="btn-add">
-                <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                تقويم
-            </button>
-        `;
-        tr.appendChild(dayTd);
+        scheduleData.forEach((day) => {
+            let currentDayDate = new Date(sunday);
+            currentDayDate.setDate(sunday.getDate() + day.dayOffset);
+            
+            let endOfDay = new Date(currentDayDate);
+            endOfDay.setHours(23, 59, 59);
+            const isPastDay = now > endOfDay;
 
-        // عمود المحاضرات
-        const lecTd = document.createElement('td');
-        if(day.lectures.length === 0) {
-            lecTd.innerHTML = '<span style="color:#666">لا توجد محاضرات</span>';
-        } else {
-            day.lectures.forEach(lec => {
-                const c = courses[lec.cIdx];
-                const div = document.createElement('div');
-                const now = new Date();
-                
-                // حساب وقت انتهاء المحاضرة
-                let lecEnd = new Date(currentDayDate);
-                let [eh, em] = lec.e.split(':');
-                lecEnd.setHours(parseInt(eh), parseInt(em), 0);
+            let btnClass = isPastDay ? 'btn-add btn-disabled' : 'btn-add';
+            let btnText = isPastDay ? 'انتهى' : 'تقويم';
+            let btnAction = isPastDay ? '' : `onclick='addToCalendar(${JSON.stringify(day.lectures)}, ${day.dayOffset})'`;
 
-                // التحقق: هل انتهت؟
-                const isFinished = now > lecEnd;
-                
-                // تحديد الكلاس
-                div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
-                div.style.borderRightColor = isFinished ? '' : c.color; // إزالة اللون إذا انتهت
+            const tr = document.createElement('tr');
+            
+            // عمود اليوم
+            const dayTd = document.createElement('td');
+            dayTd.className = 'day-col';
+            dayTd.innerHTML = `
+                <div>${day.dayName}</div>
+                <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
+                <button ${btnAction} class="${btnClass}">
+                    <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    ${btnText}
+                </button>
+            `;
+            tr.appendChild(dayTd);
 
-                const formatTime = (t) => {
-                    let [h, m] = t.split(':'); h=parseInt(h);
-                    let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
-                    return `${h}:${m} ${ampm}`;
-                };
+            // عمود المحاضرات
+            const lecTd = document.createElement('td');
+            if(day.lectures.length === 0) {
+                lecTd.innerHTML = '<span style="color:#666; font-size:0.9rem;">لا توجد محاضرات</span>';
+            } else {
+                day.lectures.forEach(lec => {
+                    const c = courses[lec.cIdx];
+                    const div = document.createElement('div');
+                    
+                    let lecEnd = new Date(currentDayDate);
+                    let [eh, em] = lec.e.split(':');
+                    lecEnd.setHours(parseInt(eh), parseInt(em), 0);
 
-                // محتوى البطاقة (نضيف شارة "انتهت" إذا كانت منتهية، أو مكان الدوام إذا لا)
-                const statusHTML = isFinished 
-                    ? `<div class="ended-badge">
-                        <svg class="icon-svg" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-                        انتهت
-                       </div>`
-                    : `<div style="font-size:0.8rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:5px;">
-                        <svg class="icon-svg" style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                        عن بعد - Blackboard
-                       </div>`;
+                    const isFinished = now > lecEnd;
+                    div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
+                    div.style.borderRightColor = isFinished ? '' : c.color;
 
-                div.innerHTML = `
-                    <div class="lecture-info">
-                        <h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4>
-                        <div class="lecture-meta">
-                            <div class="meta-row">
-                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                <span>${c.lecturer}</span>
+                    const formatTime = (t) => {
+                        let [h, m] = t.split(':'); h=parseInt(h);
+                        let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
+                        return `${h}:${m} ${ampm}`;
+                    };
+
+                    const statusHTML = isFinished 
+                        ? `<div class="ended-badge">انتهت</div>`
+                        : `<div style="font-size:0.75rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:4px;">
+                            <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                            عن بعد
+                           </div>`;
+
+                    div.innerHTML = `
+                        <div class="lecture-info">
+                            <h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4>
+                            <div class="lecture-meta">
+                                <div class="meta-row"><span>👨‍🏫 ${c.lecturer}</span></div>
+                                <div class="meta-row"><span>⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</span></div>
                             </div>
-                            <div class="meta-row">
-                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                                <span>${formatTime(lec.s)} - ${formatTime(lec.e)}</span>
-                            </div>
+                            ${statusHTML}
                         </div>
-                        ${statusHTML}
-                    </div>
-                `;
-                lecTd.appendChild(div);
-            });
-        }
-        tr.appendChild(lecTd);
-        tableBody.appendChild(tr);
-    });
+                    `;
+                    lecTd.appendChild(div);
+                });
+            }
+            tr.appendChild(lecTd);
+            tableBody.appendChild(tr);
+        });
+    }
 
-    // 4. إضافة للتقويم
+    // === 2. منطق الرادار الذكي ===
+    function updateRadar() {
+        const radarEl = document.getElementById('smart-radar');
+        const now = new Date();
+        const currentDayIndex = now.getDay(); // 0 = Sunday
+        
+        let foundLecture = null;
+        let status = "";
+        
+        // البحث عن أقرب محاضرة
+        // 1. نبحث في ما تبقى من اليوم الحالي
+        let todayLectures = scheduleData.find(d => d.dayOffset === currentDayIndex)?.lectures || [];
+        
+        for (let lec of todayLectures) {
+            let start = new Date(now);
+            let [sh, sm] = lec.s.split(':');
+            start.setHours(sh, sm, 0);
+
+            let end = new Date(now);
+            let [eh, em] = lec.e.split(':');
+            end.setHours(eh, em, 0);
+
+            if (now >= start && now <= end) {
+                foundLecture = { ...lec, timeObj: end };
+                status = "🔴 جارية الآن";
+                break;
+            } else if (now < start) {
+                foundLecture = { ...lec, timeObj: start };
+                status = "المحاضرة القادمة";
+                break;
+            }
+        }
+
+        // 2. إذا لم نجد اليوم، نبحث في الغد (بشكل مبسط)
+        if (!foundLecture) {
+            let nextDayOffset = (currentDayIndex + 1) % 7; 
+            // إذا كان اليوم الخميس(4)، الغد الجمعة(5) لا يوجد، ننتقل للأحد(0)
+            if(nextDayOffset > 4) nextDayOffset = 0; 
+            
+            let nextLectures = scheduleData.find(d => d.dayOffset === nextDayOffset)?.lectures || [];
+            if (nextLectures.length > 0) {
+                foundLecture = { ...nextLectures[0], timeObj: null }; // TimeObj يحتاج حساب دقيق للتاريخ القادم، نكتفي بالعرض
+                status = "المحاضرة القادمة (غداً/الأحد)";
+            }
+        }
+
+        if (foundLecture) {
+            radarEl.style.display = 'block';
+            const course = courses[foundLecture.cIdx];
+            document.getElementById('radar-status').innerText = status;
+            document.getElementById('radar-course').innerText = course.name;
+            
+            const formatTime = (t) => {
+                 let [h, m] = t.split(':'); h=parseInt(h);
+                 let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
+                 return `${h}:${m} ${ampm}`;
+            };
+            document.getElementById('radar-time').innerText = `${formatTime(foundLecture.s)} - ${formatTime(foundLecture.e)}`;
+
+            // حساب العداد التنازلي
+            if (foundLecture.timeObj) {
+                const diff = foundLecture.timeObj - now;
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                if (status.includes("جارية")) {
+                    document.getElementById('radar-countdown').innerText = `تنتهي خلال ${hours}س و ${minutes}د`;
+                    document.getElementById('radar-status').style.color = '#da3633'; // أحمر
+                } else {
+                    document.getElementById('radar-countdown').innerText = `تبدأ خلال ${hours}س و ${minutes}د`;
+                    document.getElementById('radar-status').style.color = '#58a6ff'; // أزرق
+                }
+            } else {
+                 document.getElementById('radar-countdown').innerText = "";
+            }
+
+        } else {
+            radarEl.style.display = 'none'; // لا محاضرات قادمة قريباً
+        }
+    }
+
+    // === 3. إضافة التقويم (نفس الدالة السابقة) ===
     function addToCalendar(lectures, dayOffset) {
         let targetDate = new Date(sunday);
         targetDate.setDate(sunday.getDate() + dayOffset);
-        
         const now = new Date();
         
         let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//MySchedule//AR\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\n";
@@ -319,53 +385,60 @@
 
         lectures.forEach(lec => {
             const course = courses[lec.cIdx];
-            
             let startDt = new Date(targetDate);
             let [sh, sm] = lec.s.split(':');
-            startDt.setHours(parseInt(sh), parseInt(sm), 0);
-
+            startDt.setHours(sh, sm, 0);
             let endDt = new Date(targetDate);
             let [eh, em] = lec.e.split(':');
-            endDt.setHours(parseInt(eh), parseInt(em), 0);
+            endDt.setHours(eh, em, 0);
 
-            if (now > endDt) return; // تجاهل المنتهي
-
+            if (now > endDt) return;
             addedCount++;
-            
             let summary = course.name;
-            let description = `المحاضر: ${course.lecturer}`;
+            if (now >= startDt && now <= endDt) summary = `[جارية الآن] ${course.name}`;
             
-            if (now >= startDt && now <= endDt) {
-                summary = `[جارية الآن] ${course.name}`;
-            }
-
             const formatICS = (d) => d.toISOString().replace(/-|:|\.\d+/g, '').substring(0, 15) + 'Z';
-
-            icsContent += "BEGIN:VEVENT\n";
-            icsContent += `DTSTART:${formatICS(startDt)}\n`;
-            icsContent += `DTEND:${formatICS(endDt)}\n`;
-            icsContent += `SUMMARY:${summary}\n`;
-            icsContent += `DESCRIPTION:${description}\n`;
-            icsContent += "LOCATION:Blackboard - عن بعد\n";
-            icsContent += `UID:${Date.now()}_${lec.cIdx}@myschedule\n`;
-            icsContent += "END:VEVENT\n";
+            icsContent += `BEGIN:VEVENT\nDTSTART:${formatICS(startDt)}\nDTEND:${formatICS(endDt)}\nSUMMARY:${summary}\nLOCATION:Blackboard\nUID:${Date.now()}_${lec.cIdx}\nEND:VEVENT\n`;
         });
-
         icsContent += "END:VCALENDAR";
 
-        if (addedCount === 0) {
-            alert("جميع محاضرات هذا اليوم انتهت! 🏁");
-            return;
-        }
-
+        if (addedCount === 0) { alert("جميع المحاضرات انتهت!"); return; }
         const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `schedule_${targetDate.toISOString().slice(0,10)}.ics`;
+        link.download = `schedule.ics`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
+
+    // === 4. تسجيل PWA Service Worker ===
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js');
+        });
+    }
+
+    // زر التثبيت
+    let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block';
+        installBtn.addEventListener('click', () => {
+            installBtn.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                deferredPrompt = null;
+            });
+        });
+    });
+
+    // تشغيل الدوال
+    renderSchedule();
+    updateRadar();
+    setInterval(updateRadar, 60000); // تحديث الرادار كل دقيقة
 </script>
 
 </body>
