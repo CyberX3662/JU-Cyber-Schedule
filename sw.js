@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cyber-schedule-v9-final-refined'; // رقم جديد
+const CACHE_NAME = 'cyber-schedule-v10-mandatory'; // التحديث الإجباري V10
 const urlsToCache = [
   './',
   './index.html',
