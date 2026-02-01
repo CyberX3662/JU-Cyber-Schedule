@@ -6,176 +6,68 @@
     <title>بوابة الأمن السيبراني</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d1117">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/993/993891.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2092/2092204.png">
     
     <style>
         :root {
-            --bg: #0d1117;
-            --card-bg: #161b22;
-            --border: #30363d;
-            --text: #e6edf3;
-            --accent: #58a6ff;
-            --success: #238636;
-            --danger: #da3633;
-            --warning: #d29922;
-            --muted: #8b949e;
-            --telegram: #229ED9;
-            --today-bg: rgba(88, 166, 255, 0.08);
+            --bg: #0d1117; --card-bg: #161b22; --border: #30363d; --text: #e6edf3;
+            --accent: #58a6ff; --success: #238636; --danger: #da3633; --warning: #d29922;
+            --muted: #8b949e; --telegram: #229ED9; --today-bg: rgba(88, 166, 255, 0.08);
             --today-border: #58a6ff;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 1. شريط التنبيهات */
-        .ticker-wrap {
-            width: 100%;
-            background: rgba(210, 153, 34, 0.1);
-            border-bottom: 1px solid var(--warning);
-            overflow: hidden;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            padding-right: 100%;
-            animation: ticker 35s linear infinite;
-            color: #e6edf3;
-            font-size: 0.85rem;
-            line-height: 40px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        .ticker-wrap { width: 100%; background: rgba(210, 153, 34, 0.1); border-bottom: 1px solid var(--warning); overflow: hidden; height: 40px; display: flex; align-items: center; position: relative; z-index: 10; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 30s linear infinite; color: #e6edf3; font-size: 0.85rem; line-height: 40px; }
         .ticker strong { color: var(--warning); }
-        /* لون مميز لكلمة قناة التلجرام */
         .ticker span { color: var(--telegram); font-weight: bold; }
-        
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(100%, 0, 0); }
-        }
-
-        .container {
-            width: 90%;
-            max-width: 800px;
-            padding: 20px 0;
-            padding-bottom: 80px;
-        }
-
-        /* 2. الأزرار العلوية */
-        .header-actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
-        .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin: 0; }
-        
-        .header-buttons { display: flex; gap: 8px; }
-
-        .btn-action {
-            border: none; padding: 6px 12px;
-            border-radius: 20px; font-weight: bold; cursor: pointer; 
-            font-size: 0.8rem; display: flex; align-items: center; gap: 6px;
-            text-decoration: none; color: white; transition: 0.2s;
-        }
-
-        .btn-telegram { background: var(--telegram); }
-        .btn-telegram:hover { background: #1b8ac0; }
-        .btn-telegram.disabled { background: #2f363d; color: #8b949e; cursor: help; }
-
-        .btn-notify { background: var(--card-bg); border: 1px solid var(--muted); color: var(--text); }
-        .btn-notify.active { background: var(--success); border-color: var(--success); }
-
-        .btn-install { background: var(--accent); display: none; }
-
-        /* الرادار */
-        .smart-radar {
-            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(35, 134, 54, 0.1));
-            border: 1px solid var(--accent);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            display: none;
-        }
-        .radar-status { font-size: 0.8rem; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        .container { width: 90%; max-width: 800px; padding: 20px 0; padding-bottom: 80px; }
+        .smart-radar { background: linear-gradient(135deg, rgba(88, 166, 255, 0.1), rgba(35, 134, 54, 0.1)); border: 1px solid var(--accent); border-radius: 12px; padding: 15px; margin-bottom: 25px; text-align: center; position: relative; overflow: hidden; display: none; }
+        .radar-status { font-size: 0.8rem; color: var(--accent); margin-bottom: 5px; }
         .radar-course { font-size: 1.3rem; font-weight: bold; margin: 5px 0; }
         .radar-time { font-size: 1rem; background: rgba(0,0,0,0.3); display: inline-block; padding: 2px 10px; border-radius: 15px; margin-top: 5px; }
         .radar-countdown { font-size: 0.85rem; color: var(--muted); margin-top: 5px; }
-        .radar-pulse {
-            position: absolute; top: 10px; left: 10px; width: 8px; height: 8px;
-            background: var(--success); border-radius: 50%;
-            animation: pulse-green 2s infinite;
-        }
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(35, 134, 54, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0); }
-        }
-
-        /* الجدول */
+        .radar-pulse { position: absolute; top: 10px; left: 10px; width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(35, 134, 54, 0); } 100% { box-shadow: 0 0 0 0 rgba(35, 134, 54, 0); } }
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; }
+        .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin: 0; }
+        .header-buttons { display: flex; gap: 8px; }
+        .btn-action { border: none; padding: 6px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; text-decoration: none; color: white; transition: 0.2s; }
+        .btn-telegram { background: var(--telegram); }
+        .btn-telegram.disabled { background: #2f363d; color: #8b949e; cursor: help; }
+        .btn-notify { background: var(--card-bg); border: 1px solid var(--muted); color: var(--text); }
+        .btn-notify.active { background: var(--success); border-color: var(--success); }
+        .btn-install { background: var(--accent); display: none; }
         table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
         tr { background: var(--card-bg); }
         td { padding: 15px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); vertical-align: top; }
         td:first-child { border-right: 1px solid var(--border); border-left: 1px solid var(--border); border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
         td:last-child { border-left: 1px solid var(--border); border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-
         tr.today-row td { background: var(--today-bg); border-color: var(--today-border); }
         tr.today-row td:first-child { border-right: 3px solid var(--today-border); }
         .today-badge { font-size: 0.7rem; background: var(--accent); color: white; padding: 2px 6px; border-radius: 4px; margin-top: 5px; display: inline-block; }
-
         .day-col { width: 90px; font-weight: bold; color: var(--accent); text-align: center; vertical-align: middle; }
         .date-sub { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; font-family: monospace; direction: ltr; }
-
-        .lecture-item { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 10px; margin-bottom: 8px; 
-            border-radius: 6px; border-right: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; 
-            position: relative; overflow: hidden;
-        }
+        .lecture-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 10px; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
         .lecture-past { opacity: 0.6; filter: grayscale(1); background: #090c10; border-right-color: #30363d !important; }
         .ended-badge { background: #21262d; color: #8b949e; border: 1px solid #30363d; font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; }
-        
         .lecture-info h4 { margin: 0 0 5px 0; font-size: 0.95rem; }
         .lecture-meta { font-size: 0.8rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 10px; }
         .meta-row { display: flex; align-items: center; gap: 4px; }
         .icon-svg { width: 14px; height: 14px; fill: currentColor; opacity: 0.8; }
-
         .progress-bar-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: transparent; }
         .progress-bar-fill { height: 100%; background: var(--danger); width: 0%; transition: width 1s linear; }
-
-        @media (max-width: 600px) {
-            .container { width: 95%; }
-            .lecture-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .day-col { width: 80px; font-size: 0.9rem; }
-            .header-buttons { width: 100%; justify-content: flex-end; margin-top: 10px; }
-        }
     </style>
 </head>
 <body>
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث في وقت المحاضرة، الرجوع دائمًا إلى <span>قناة التلجرام (الرابط قريباً)</span> أو البلاك بورد.
+        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث، يرجى الرجوع دائمًا إلى <span>قناة التلجرام (الرابط قريباً)</span> أو المصادر الرسمية.
     </div>
 </div>
 
 <div class="container">
-    
     <div id="smart-radar" class="smart-radar">
         <div class="radar-pulse"></div>
         <div class="radar-status" id="radar-status">المحاضرة القادمة</div>
@@ -186,41 +78,24 @@
 
     <div class="header-actions">
         <h2 class="header-title">
-            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+            <svg class="icon-svg" style="width:24px; height:24px; color:var(--accent);" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
             الجدول الدراسي
         </h2>
         <div class="header-buttons">
-            <a id="telegram-btn" href="#" class="btn-action btn-telegram">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-                <span id="telegram-text">القناة</span>
-            </a>
-            <button id="notify-btn" class="btn-action btn-notify" onclick="toggleNotifications()">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
-                تنبيهات
-            </button>
+            <a id="telegram-btn" href="#" class="btn-action btn-telegram">قناة التلجرام</a>
+            <button id="notify-btn" class="btn-action btn-notify" onclick="toggleNotifications()">تنبيهات</button>
             <button id="install-btn" class="btn-action btn-install">📲 تثبيت</button>
         </div>
     </div>
-
-    <table id="schedule-table">
-        <tbody id="table-body"></tbody>
-    </table>
+    <table id="schedule-table"><tbody id="table-body"></tbody></table>
 </div>
 
 <script>
-    // ============================================
-    // 1. الإعدادات
-    // ============================================
-    const telegramLink = ""; // 👈 اتركها فارغة حالياً
-
+    const telegramLink = "";
     const telegramBtn = document.getElementById('telegram-btn');
-    if (!telegramLink) {
-        telegramBtn.href = "javascript:void(0)";
+    if (!telegramLink) { 
+        telegramBtn.onclick = () => alert("الرابط سيتم إضافته قريباً حال توفره.");
         telegramBtn.classList.add('disabled');
-        telegramBtn.onclick = () => alert("عذراً، رابط القناة غير متوفر حالياً. سيتم إضافته قريباً بإذن الله.");
-        document.getElementById('telegram-text').innerText = "القناة (قريباً)";
-    } else {
-        telegramBtn.href = telegramLink;
     }
 
     const courses = [
@@ -239,281 +114,77 @@
         { dayOffset: 4, dayName: "الخميس", lectures: [{ cIdx: 0, s: "15:00", e: "15:50" }] }
     ];
 
-    // ============================================
-    // 2. منطق الإشعارات
-    // ============================================
-    let notificationsEnabled = localStorage.getItem('notifications') === 'true';
-    const notifyBtn = document.getElementById('notify-btn');
-    if(notificationsEnabled) notifyBtn.classList.add('active');
-
-    function toggleNotifications() {
-        if (!("Notification" in window)) {
-            alert("عذراً، متصفحك لا يدعم الإشعارات.");
-            return;
-        }
-
-        if (notificationsEnabled) {
-            notificationsEnabled = false;
-            localStorage.setItem('notifications', 'false');
-            notifyBtn.classList.remove('active');
-            alert("تم إيقاف التنبيهات.");
-        } else {
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    notificationsEnabled = true;
-                    localStorage.setItem('notifications', 'true');
-                    notifyBtn.classList.add('active');
-                    new Notification("تم تفعيل التنبيهات! 🔔", {
-                        body: "سنقوم بتنبيهك قبل المحاضرات بـ 10 دقائق.",
-                        icon: "https://cdn-icons-png.flaticon.com/512/993/993891.png"
-                    });
-                }
-            });
-        }
-    }
-
-    const notifiedLectures = new Set(); 
-
-    function checkNotifications() {
-        if (!notificationsEnabled) return;
-
-        const now = new Date();
-        const currentDayIndex = now.getDay();
-        const todaySchedule = scheduleData.find(d => d.dayOffset === currentDayIndex);
-
-        if (!todaySchedule) return;
-
-        todaySchedule.lectures.forEach(lec => {
-            let start = new Date(now);
-            let [sh, sm] = lec.s.split(':');
-            start.setHours(sh, sm, 0);
-
-            const diffMinutes = (start - now) / 1000 / 60;
-            const lecKey = `${currentDayIndex}-${lec.cIdx}-${lec.s}`; 
-
-            if (diffMinutes > 9 && diffMinutes <= 10 && !notifiedLectures.has(lecKey)) {
-                const course = courses[lec.cIdx];
-                new Notification(`تذكير: محاضرة ${course.name}`, {
-                    body: `ستبدأ بعد 10 دقائق مع ${course.lecturer}`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/993/993891.png"
-                });
-                notifiedLectures.add(lecKey);
-            }
-        });
-    }
-
-    // ============================================
-    // 3. دوال بناء الجدول والرادار
-    // ============================================
     function getSundayDate() {
-        const d = new Date();
-        const day = d.getDay();
-        const diff = d.getDate() - day; 
-        return new Date(d.setDate(diff));
+        const d = new Date(); const day = d.getDay();
+        const diff = d.getDate() - day; return new Date(d.setDate(diff));
     }
 
     const tableBody = document.getElementById('table-body');
     const sunday = getSundayDate();
 
     function renderSchedule() {
-        tableBody.innerHTML = '';
-        const now = new Date();
-        const todayDateString = now.toDateString();
+        tableBody.innerHTML = ''; const now = new Date(); const todayDateString = now.toDateString();
         let todayElementId = null;
-
         scheduleData.forEach((day, index) => {
-            let currentDayDate = new Date(sunday);
-            currentDayDate.setDate(sunday.getDate() + day.dayOffset);
-            
+            let currentDayDate = new Date(sunday); currentDayDate.setDate(sunday.getDate() + day.dayOffset);
             const isToday = currentDayDate.toDateString() === todayDateString;
-            const rowId = `day-row-${index}`;
-            if(isToday) todayElementId = rowId;
-
-            let endOfDay = new Date(currentDayDate);
-            endOfDay.setHours(23, 59, 59);
+            const rowId = `day-row-${index}`; if(isToday) todayElementId = rowId;
+            let endOfDay = new Date(currentDayDate); endOfDay.setHours(23, 59, 59);
             const isPastDay = now > endOfDay;
-
-            const rowClass = isToday ? 'today-row' : '';
-            const badgeHTML = isToday ? '<div class="today-badge">اليوم</div>' : '';
-
-            const tr = document.createElement('tr');
-            tr.className = rowClass;
-            tr.id = rowId;
-            
-            const dayTd = document.createElement('td');
-            dayTd.className = 'day-col';
-            dayTd.innerHTML = `
-                <div>${day.dayName}</div>
-                ${badgeHTML}
-                <div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>
-            `;
+            const tr = document.createElement('tr'); tr.className = isToday ? 'today-row' : ''; tr.id = rowId;
+            const dayTd = document.createElement('td'); dayTd.className = 'day-col';
+            dayTd.innerHTML = `<div>${day.dayName}</div>${isToday ? '<div class="today-badge">اليوم</div>' : ''}<div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>`;
             tr.appendChild(dayTd);
-
             const lecTd = document.createElement('td');
-            if(day.lectures.length === 0) {
-                lecTd.innerHTML = '<span style="color:#666; font-size:0.9rem;">لا توجد محاضرات</span>';
-            } else {
-                day.lectures.forEach(lec => {
-                    const c = courses[lec.cIdx];
-                    const div = document.createElement('div');
-                    
-                    let lecStart = new Date(currentDayDate);
-                    let [sh, sm] = lec.s.split(':');
-                    lecStart.setHours(sh, sm, 0);
-
-                    let lecEnd = new Date(currentDayDate);
-                    let [eh, em] = lec.e.split(':');
-                    lecEnd.setHours(eh, em, 0);
-
-                    const isFinished = now > lecEnd;
-                    const isRunning = now >= lecStart && now <= lecEnd;
-
-                    div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
-                    div.style.borderRightColor = isFinished ? '' : c.color;
-
-                    let progressHTML = '';
-                    if (isRunning) {
-                        const totalDuration = lecEnd - lecStart;
-                        const elapsed = now - lecStart;
-                        const percent = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
-                        progressHTML = `<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${percent}%"></div></div>`;
-                    }
-
-                    const formatTime = (t) => {
-                        let [h, m] = t.split(':'); h=parseInt(h);
-                        let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
-                        return `${h}:${m} ${ampm}`;
-                    };
-
-                    const statusHTML = isFinished 
-                        ? `<div class="ended-badge">انتهت</div>`
-                        : `<div style="font-size:0.75rem; color:var(--accent); margin-top:6px; display:flex; align-items:center; gap:4px;">
-                            <svg class="icon-svg" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                            عن بعد
-                           </div>`;
-
-                    div.innerHTML = `
-                        <div class="lecture-info" style="width:100%">
-                            <h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4>
-                            <div class="lecture-meta">
-                                <div class="meta-row"><span>👨‍🏫 ${c.lecturer}</span></div>
-                                <div class="meta-row"><span>⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</span></div>
-                            </div>
-                            ${statusHTML}
-                        </div>
-                        ${progressHTML}
-                    `;
-                    lecTd.appendChild(div);
-                });
-            }
-            tr.appendChild(lecTd);
-            tableBody.appendChild(tr);
+            day.lectures.forEach(lec => {
+                const c = courses[lec.cIdx]; const div = document.createElement('div');
+                let lStart = new Date(currentDayDate); let [sh, sm] = lec.s.split(':'); lStart.setHours(sh, sm, 0);
+                let lEnd = new Date(currentDayDate); let [eh, em] = lec.e.split(':'); lEnd.setHours(eh, em, 0);
+                const isFinished = now > lEnd; const isRunning = now >= lStart && now <= lEnd;
+                div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
+                div.style.borderRightColor = isFinished ? '' : c.color;
+                const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
+                div.innerHTML = `<div class="lecture-info"><h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4><div class="lecture-meta"><div class="meta-row">👨‍🏫 ${c.lecturer}</div><div class="meta-row">⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</div></div>${isFinished ? '<div class="ended-badge">انتهت</div>' : '<div style="font-size:0.75rem; color:var(--accent); margin-top:6px;">عن بعد</div>'}</div>`;
+                if(isRunning) { let p = ((now - lStart) / (lEnd - lStart)) * 100; div.innerHTML += `<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${p}%"></div></div>`; }
+                lecTd.appendChild(div);
+            });
+            tr.appendChild(lecTd); tableBody.appendChild(tr);
         });
-
-        if (todayElementId) {
-            setTimeout(() => {
-                const el = document.getElementById(todayElementId);
-                if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
-        }
+        if (todayElementId) { setTimeout(() => { const el = document.getElementById(todayElementId); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500); }
     }
 
     function updateRadar() {
-        const radarEl = document.getElementById('smart-radar');
-        const now = new Date();
-        const currentDayIndex = now.getDay(); 
-        
-        let foundLecture = null;
-        let status = "";
-        
-        let todayLectures = scheduleData.find(d => d.dayOffset === currentDayIndex)?.lectures || [];
-        
-        for (let lec of todayLectures) {
-            let start = new Date(now);
-            let [sh, sm] = lec.s.split(':');
-            start.setHours(sh, sm, 0);
-
-            let end = new Date(now);
-            let [eh, em] = lec.e.split(':');
-            end.setHours(eh, em, 0);
-
-            if (now >= start && now <= end) {
-                foundLecture = { ...lec, timeObj: end };
-                status = "🔴 جارية الآن";
-                break;
-            } else if (now < start) {
-                foundLecture = { ...lec, timeObj: start };
-                status = "المحاضرة القادمة";
-                break;
+        const radarEl = document.getElementById('smart-radar'); const now = new Date(); const dayIdx = now.getDay();
+        let found = null; let status = "";
+        let todayLecs = scheduleData.find(d => d.dayOffset === dayIdx)?.lectures || [];
+        for (let lec of todayLecs) {
+            let s = new Date(now); let [sh, sm] = lec.s.split(':'); s.setHours(sh, sm, 0);
+            let e = new Date(now); let [eh, em] = lec.e.split(':'); e.setHours(eh, em, 0);
+            if (now >= s && now <= e) { found = { ...lec, tObj: e }; status = "🔴 جارية الآن"; break; }
+            else if (now < s) { found = { ...lec, tObj: s }; status = "المحاضرة القادمة اليوم"; break; }
+        }
+        if (!found) {
+            for (let i = 1; i <= 7; i++) {
+                let nextIdx = (dayIdx + i) % 7; if(nextIdx > 4) continue;
+                let nextLecs = scheduleData.find(d => d.dayOffset === nextIdx)?.lectures || [];
+                if (nextLecs.length > 0) { found = { ...nextLecs[0], tObj: null }; status = `المحاضرة القادمة (${scheduleData.find(d => d.dayOffset === nextIdx).dayName})`; break; }
             }
         }
-
-        if (!foundLecture) {
-            let nextDayOffset = (currentDayIndex + 1) % 7; 
-            if(nextDayOffset > 4) nextDayOffset = 0; 
-            let nextLectures = scheduleData.find(d => d.dayOffset === nextDayOffset)?.lectures || [];
-            if (nextLectures.length > 0) {
-                foundLecture = { ...nextLectures[0], timeObj: null }; 
-                status = "المحاضرة القادمة (غداً/الأحد)";
-            }
-        }
-
-        if (foundLecture) {
-            radarEl.style.display = 'block';
-            const course = courses[foundLecture.cIdx];
-            document.getElementById('radar-status').innerText = status;
-            document.getElementById('radar-course').innerText = course.name;
-            const formatTime = (t) => {
-                 let [h, m] = t.split(':'); h=parseInt(h);
-                 let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12;
-                 return `${h}:${m} ${ampm}`;
-            };
-            document.getElementById('radar-time').innerText = `${formatTime(foundLecture.s)} - ${formatTime(foundLecture.e)}`;
-
-            if (foundLecture.timeObj) {
-                const diff = foundLecture.timeObj - now;
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                if (status.includes("جارية")) {
-                    document.getElementById('radar-countdown').innerText = `تنتهي خلال ${hours}س و ${minutes}د`;
-                    document.getElementById('radar-status').style.color = '#da3633';
-                    document.querySelector('.radar-pulse').style.background = '#da3633';
-                } else {
-                    document.getElementById('radar-countdown').innerText = `تبدأ خلال ${hours}س و ${minutes}د`;
-                    document.getElementById('radar-status').style.color = '#58a6ff';
-                    document.querySelector('.radar-pulse').style.background = '#238636';
-                }
-            } else {
-                 document.getElementById('radar-countdown').innerText = "";
-            }
-        } else {
-            radarEl.style.display = 'none';
-        }
+        if (found) {
+            radarEl.style.display = 'block'; document.getElementById('radar-status').innerText = status;
+            document.getElementById('radar-course').innerText = courses[found.cIdx].name;
+            const ft = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ap = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ap}`; };
+            document.getElementById('radar-time').innerText = `${ft(found.s)} - ${ft(found.e)}`;
+            if (found.tObj) {
+                let diff = found.tObj - now; let m = Math.floor((diff / 1000 / 60) % 60); let h = Math.floor((diff / 1000 / 60 / 60));
+                document.getElementById('radar-countdown').innerText = status.includes("جارية") ? `تنتهي خلال ${h}س و ${m}د` : `تبدأ خلال ${h}س و ${m}د`;
+            } else { document.getElementById('radar-countdown').innerText = ""; }
+        } else { radarEl.style.display = 'none'; }
     }
 
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
-    }
-
-    let deferredPrompt;
-    const installBtn = document.getElementById('install-btn');
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installBtn.style.display = 'block';
-        installBtn.addEventListener('click', () => {
-            installBtn.style.display = 'none';
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => { deferredPrompt = null; });
-        });
-    });
-
-    renderSchedule();
-    updateRadar();
-    setInterval(updateRadar, 60000); 
-    setInterval(renderSchedule, 60000);
-    setInterval(checkNotifications, 60000);
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+    renderSchedule(); updateRadar(); setInterval(updateRadar, 60000); setInterval(renderSchedule, 60000);
 </script>
-
 </body>
 </html>
+
