@@ -7,6 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d1117">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2092/2092204.png">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2092/2092204.png">
     
     <style>
         :root {
@@ -63,14 +64,14 @@
 
 <div class="ticker-wrap">
     <div class="ticker">
-        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث، يرجى الرجوع دائمًا إلى <span>قناة التلجرام (الرابط قريباً)</span> أو المصادر الرسمية.
+        <strong>⚠️ إخلاء مسؤولية:</strong> هذا التطبيق مبادرة طلابية تطوعية ولا يتبع لأي جهة رسمية. في حال وجود تحديث، الرجوع دائمًا إلى <span>قناة التلجرام (الرابط قريباً)</span> أو المصادر الرسمية.
     </div>
 </div>
 
 <div class="container">
     <div id="smart-radar" class="smart-radar">
         <div class="radar-pulse"></div>
-        <div class="radar-status" id="radar-status">المحاضرة القادمة</div>
+        <div class="radar-status" id="radar-status">...</div>
         <h3 class="radar-course" id="radar-course">...</h3>
         <div class="radar-time" id="radar-time">--:--</div>
         <div class="radar-countdown" id="radar-countdown">--</div>
@@ -91,11 +92,14 @@
 </div>
 
 <script>
-    const telegramLink = "";
+    // 1. الإعدادات
+    const telegramLink = ""; // اتركه فارغاً حتى يتوفر الرابط
     const telegramBtn = document.getElementById('telegram-btn');
     if (!telegramLink) { 
         telegramBtn.onclick = () => alert("الرابط سيتم إضافته قريباً حال توفره.");
         telegramBtn.classList.add('disabled');
+    } else {
+        telegramBtn.href = telegramLink;
     }
 
     const courses = [
@@ -122,6 +126,7 @@
     const tableBody = document.getElementById('table-body');
     const sunday = getSundayDate();
 
+    // 2. دالة بناء الجدول
     function renderSchedule() {
         tableBody.innerHTML = ''; const now = new Date(); const todayDateString = now.toDateString();
         let todayElementId = null;
@@ -131,60 +136,106 @@
             const rowId = `day-row-${index}`; if(isToday) todayElementId = rowId;
             let endOfDay = new Date(currentDayDate); endOfDay.setHours(23, 59, 59);
             const isPastDay = now > endOfDay;
+            
             const tr = document.createElement('tr'); tr.className = isToday ? 'today-row' : ''; tr.id = rowId;
             const dayTd = document.createElement('td'); dayTd.className = 'day-col';
             dayTd.innerHTML = `<div>${day.dayName}</div>${isToday ? '<div class="today-badge">اليوم</div>' : ''}<div class="date-sub">${currentDayDate.toLocaleDateString('en-GB')}</div>`;
             tr.appendChild(dayTd);
+            
             const lecTd = document.createElement('td');
-            day.lectures.forEach(lec => {
-                const c = courses[lec.cIdx]; const div = document.createElement('div');
-                let lStart = new Date(currentDayDate); let [sh, sm] = lec.s.split(':'); lStart.setHours(sh, sm, 0);
-                let lEnd = new Date(currentDayDate); let [eh, em] = lec.e.split(':'); lEnd.setHours(eh, em, 0);
-                const isFinished = now > lEnd; const isRunning = now >= lStart && now <= lEnd;
-                div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
-                div.style.borderRightColor = isFinished ? '' : c.color;
-                const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
-                div.innerHTML = `<div class="lecture-info"><h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4><div class="lecture-meta"><div class="meta-row">👨‍🏫 ${c.lecturer}</div><div class="meta-row">⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</div></div>${isFinished ? '<div class="ended-badge">انتهت</div>' : '<div style="font-size:0.75rem; color:var(--accent); margin-top:6px;">عن بعد</div>'}</div>`;
-                if(isRunning) { let p = ((now - lStart) / (lEnd - lStart)) * 100; div.innerHTML += `<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${p}%"></div></div>`; }
-                lecTd.appendChild(div);
-            });
+            if(day.lectures.length === 0) {
+                 lecTd.innerHTML = '<span style="color:#666; font-size:0.9rem;">لا توجد محاضرات</span>';
+            } else {
+                day.lectures.forEach(lec => {
+                    const c = courses[lec.cIdx]; const div = document.createElement('div');
+                    let lStart = new Date(currentDayDate); let [sh, sm] = lec.s.split(':'); lStart.setHours(sh, sm, 0);
+                    let lEnd = new Date(currentDayDate); let [eh, em] = lec.e.split(':'); lEnd.setHours(eh, em, 0);
+                    const isFinished = now > lEnd; const isRunning = now >= lStart && now <= lEnd;
+                    div.className = isFinished ? 'lecture-item lecture-past' : 'lecture-item';
+                    div.style.borderRightColor = isFinished ? '' : c.color;
+                    const formatTime = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ampm = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ampm}`; };
+                    div.innerHTML = `<div class="lecture-info"><h4>${c.name} <span style="font-size:0.8em; color:${isFinished ? '#666' : c.color}">(${c.code})</span></h4><div class="lecture-meta"><div class="meta-row">👨‍🏫 ${c.lecturer}</div><div class="meta-row">⏰ ${formatTime(lec.s)} - ${formatTime(lec.e)}</div></div>${isFinished ? '<div class="ended-badge">انتهت</div>' : '<div style="font-size:0.75rem; color:var(--accent); margin-top:6px;">عن بعد</div>'}</div>`;
+                    if(isRunning) { let p = ((now - lStart) / (lEnd - lStart)) * 100; div.innerHTML += `<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${p}%"></div></div>`; }
+                    lecTd.appendChild(div);
+                });
+            }
             tr.appendChild(lecTd); tableBody.appendChild(tr);
         });
         if (todayElementId) { setTimeout(() => { const el = document.getElementById(todayElementId); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 500); }
     }
 
+    // 3. دالة الرادار الذكية (المصححة)
     function updateRadar() {
         const radarEl = document.getElementById('smart-radar'); const now = new Date(); const dayIdx = now.getDay();
         let found = null; let status = "";
-        let todayLecs = scheduleData.find(d => d.dayOffset === dayIdx)?.lectures || [];
-        for (let lec of todayLecs) {
-            let s = new Date(now); let [sh, sm] = lec.s.split(':'); s.setHours(sh, sm, 0);
-            let e = new Date(now); let [eh, em] = lec.e.split(':'); e.setHours(eh, em, 0);
-            if (now >= s && now <= e) { found = { ...lec, tObj: e }; status = "🔴 جارية الآن"; break; }
-            else if (now < s) { found = { ...lec, tObj: s }; status = "المحاضرة القادمة اليوم"; break; }
-        }
-        if (!found) {
-            for (let i = 1; i <= 7; i++) {
-                let nextIdx = (dayIdx + i) % 7; if(nextIdx > 4) continue;
-                let nextLecs = scheduleData.find(d => d.dayOffset === nextIdx)?.lectures || [];
-                if (nextLecs.length > 0) { found = { ...nextLecs[0], tObj: null }; status = `المحاضرة القادمة (${scheduleData.find(d => d.dayOffset === nextIdx).dayName})`; break; }
+
+        // البحث في محاضرات اليوم الحالي (المتبقية)
+        let todayData = scheduleData.find(d => d.dayOffset === dayIdx);
+        if (todayData) {
+            for (let lec of todayData.lectures) {
+                let s = new Date(now); let [sh, sm] = lec.s.split(':'); s.setHours(sh, sm, 0);
+                let e = new Date(now); let [eh, em] = lec.e.split(':'); e.setHours(eh, em, 0);
+                if (now >= s && now <= e) { found = { ...lec, tObj: e }; status = "🔴 جارية الآن"; break; }
+                else if (now < s) { found = { ...lec, tObj: s }; status = "المحاضرة القادمة (اليوم)"; break; }
             }
         }
+
+        // إذا لم نجد شيئاً اليوم، ابحث في الأيام القادمة بالترتيب
+        if (!found) {
+            for (let i = 1; i <= 7; i++) {
+                let nextIdx = (dayIdx + i) % 7;
+                // إذا كان يوم جمعة (5) أو سبت (6) لا يوجد في الجدول، سنتخطاه تلقائياً لأنه غير موجود في scheduleData
+                let nextDayData = scheduleData.find(d => d.dayOffset === nextIdx);
+                
+                if (nextDayData && nextDayData.lectures.length > 0) {
+                    // وجدنا أول يوم دوام قادم
+                    let firstLec = nextDayData.lectures[0];
+                    // يجب حساب تاريخ المحاضرة القادمة بدقة للعداد التنازلي
+                    let nextDate = new Date(now);
+                    nextDate.setDate(now.getDate() + i);
+                    let [sh, sm] = firstLec.s.split(':');
+                    nextDate.setHours(sh, sm, 0);
+                    
+                    found = { ...firstLec, tObj: nextDate };
+                    status = `المحاضرة القادمة (${nextDayData.dayName})`;
+                    break;
+                }
+            }
+        }
+
         if (found) {
             radarEl.style.display = 'block'; document.getElementById('radar-status').innerText = status;
             document.getElementById('radar-course').innerText = courses[found.cIdx].name;
             const ft = (t) => { let [h, m] = t.split(':'); h=parseInt(h); let ap = h>=12 ? 'م' : 'ص'; h=h%12||12; return `${h}:${m} ${ap}`; };
             document.getElementById('radar-time').innerText = `${ft(found.s)} - ${ft(found.e)}`;
             if (found.tObj) {
-                let diff = found.tObj - now; let m = Math.floor((diff / 1000 / 60) % 60); let h = Math.floor((diff / 1000 / 60 / 60));
-                document.getElementById('radar-countdown').innerText = status.includes("جارية") ? `تنتهي خلال ${h}س و ${m}د` : `تبدأ خلال ${h}س و ${m}د`;
-            } else { document.getElementById('radar-countdown').innerText = ""; }
+                let diff = found.tObj - now;
+                if (diff > 0) {
+                    let d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    let h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    let m = Math.floor((diff / 1000 / 60) % 60);
+                    let timeStr = "";
+                    if(d > 0) timeStr += `${d}ي و `;
+                    timeStr += `${h}س و ${m}د`;
+                    
+                    document.getElementById('radar-countdown').innerText = status.includes("جارية") ? `تنتهي خلال ${timeStr}` : `تبدأ خلال ${timeStr}`;
+                } else {
+                    document.getElementById('radar-countdown').innerText = "الآن";
+                }
+            }
         } else { radarEl.style.display = 'none'; }
     }
 
+    // PWA & Service Worker
     if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+    let deferredPrompt; const installBtn = document.getElementById('install-btn');
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block';
+        installBtn.addEventListener('click', () => { installBtn.style.display = 'none'; deferredPrompt.prompt(); deferredPrompt.userChoice.then((choiceResult) => { deferredPrompt = null; }); });
+    });
+
     renderSchedule(); updateRadar(); setInterval(updateRadar, 60000); setInterval(renderSchedule, 60000);
+    // Notification Logic (Simplified for space)
+    function toggleNotifications() { Notification.requestPermission().then(p => { if(p==="granted") new Notification("تم تفعيل التنبيهات"); }); }
 </script>
 </body>
 </html>
-
