@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cyber-schedule-v7-final-fix'; // رقم جديد
+const CACHE_NAME = 'cyber-schedule-v8-tabs-update'; // رقم جديد
 const urlsToCache = [
   './',
   './index.html',
